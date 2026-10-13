@@ -1,0 +1,47 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    // You are an admin if a document with your user ID exists in the "admins" collection.
+    function isAdmin() {
+      return signedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    // The public catalog: anyone can read it, only admins can change it.
+    match /challenges/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /opps/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /highlights/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // The admin list. The app reads your own entry to decide whether to show the Admin tab.
+    // Nobody can add admins from the app. You add them in the Firebase console.
+    match /admins/{uid} {
+      allow read: if signedIn() && request.auth.uid == uid;
+      allow write: if false;
+    }
+
+    // Each student's answers, saved items, and progress. Only that student can read or write them.
+    match /data/users/{uid}/{rest=**} {
+      allow read, write: if signedIn() && request.auth.uid == uid;
+    }
+
+    // Builds and program suggestions sent in by students.
+    // Each student can only touch their own document. Admins can review all of them.
+    match /submissions/{uid} {
+      allow read, write: if signedIn() && request.auth.uid == uid;
+      allow read, write: if isAdmin();
+    }
+  }
+}

@@ -1,0 +1,952 @@
+{
+ "challenges": {
+  "solar-oven": {
+   "title": "Pizza box solar oven",
+   "blurb": "Turn a pizza box into an oven that runs on sunlight, then use it to melt a s'more.",
+   "track": "hardware",
+   "level": 0,
+   "minGrade": 3,
+   "maxGrade": 8,
+   "time": "About 1 hour, plus 30 minutes of sun",
+   "interests": [
+    "environment",
+    "engineering",
+    "space"
+   ],
+   "tools": [],
+   "credit": {
+    "name": "Science Buddies",
+    "url": "https://www.sciencebuddies.org/stem-activities/solar-oven"
+   },
+   "source": "",
+   "materials": [
+    "Pizza box (bigger works better)",
+    "Aluminum foil",
+    "Plastic wrap",
+    "Black paper",
+    "White glue and tape",
+    "Ruler and pencil",
+    "Wooden skewer or pencil to prop the lid",
+    "Graham crackers, marshmallows, chocolate",
+    "A small foil tray or pie pan"
+   ],
+   "steps": [
+    "Take out any cardboard liner from the pizza box.",
+    "On the lid, draw a square about one inch in from each edge.",
+    "With an adult, cut along three sides of the square with a utility knife. Leave the hinge side uncut so it makes a flap.",
+    "Cover the inside of the flap with foil, folding the edges over, and glue it smooth. This reflects sunlight into the box.",
+    "Tape plastic wrap tightly over the opening in the lid so there are no gaps. This traps the heat.",
+    "Line the bottom and inner walls of the box with foil and glue it down.",
+    "Glue black paper to the middle of the bottom. Dark colors soak up heat.",
+    "Prop the flap open at about 90 degrees with a skewer and tape.",
+    "Put a s'more on the foil tray in the middle, close the lid, and set the oven in full sun with the flap facing the sun.",
+    "Wait at least 30 minutes. Check if the marshmallow is soft. Try changing the flap angle and see if it heats faster."
+   ],
+   "safety": "Ask an adult to do the cutting. The inside of the oven gets hot, so use an oven mitt to take food out. Works best on sunny days above 75°F.",
+   "createdAt": 1792000000000
+  },
+  "straw-rocket": {
+   "title": "Straw rocket test flight",
+   "blurb": "Build a paper rocket that launches from a straw, then change one thing at a time to make it fly farther, like NASA engineers do.",
+   "track": "hardware",
+   "level": 0,
+   "minGrade": 4,
+   "maxGrade": 8,
+   "time": "Under 30 minutes",
+   "interests": [
+    "space",
+    "engineering"
+   ],
+   "tools": [],
+   "credit": {
+    "name": "NASA JPL Education",
+    "url": "https://www.jpl.nasa.gov/edu/resources/project/make-a-straw-rocket/"
+   },
+   "source": "",
+   "materials": [
+    "Rocket template from NASA JPL (printable PDF on the guide page)",
+    "Pencil",
+    "Scissors",
+    "Tape",
+    "Soda straw",
+    "Measuring tape or meter stick"
+   ],
+   "steps": [
+    "Print the rocket template and cut out the big rectangle.",
+    "Wrap the rectangle around a pencil the long way and tape it into a tube.",
+    "Cut out the two fin pieces. Tape one to the bottom of the tube so nothing sticks out past the end.",
+    "Tape the second fin piece on the opposite side to make a fin sandwich.",
+    "Bend each fin out 90 degrees so they make a plus sign when you look from below.",
+    "Twist and pinch the top of the tube around the pencil tip to make a nose cone, then tape it.",
+    "Slide the pencil out and slide a straw in.",
+    "Mark a launch line, blow hard through the straw, and measure how far the rocket flew.",
+    "Change one thing, like fin size or rocket length, and launch again. Keep a log of what helps the most."
+   ],
+   "safety": "Never aim a rocket at a person or animal.",
+   "createdAt": 1792000000001
+  },
+  "scratch-catch": {
+   "title": "Make a catch game in Scratch",
+   "blurb": "Code a game where you move a character to catch falling objects and keep score. No typing code, just drag blocks.",
+   "track": "software",
+   "level": 0,
+   "minGrade": 3,
+   "maxGrade": 8,
+   "time": "About 1 to 2 hours",
+   "interests": [
+    "code",
+    "games"
+   ],
+   "tools": [
+    "Scratch"
+   ],
+   "credit": {
+    "name": "Scratch, MIT Media Lab",
+    "url": "https://scratch.mit.edu/ideas"
+   },
+   "source": "",
+   "materials": [
+    "A computer or tablet with a web browser",
+    "A free Scratch account (optional, needed to save and share)"
+   ],
+   "steps": [
+    "Go to scratch.mit.edu and click Create.",
+    "Pick a catcher sprite, like a bowl or a cat, and move it to the bottom of the stage.",
+    "Add 'when green flag clicked' and a 'forever' loop. Inside it, make the sprite follow the mouse's x position, or move with the arrow keys.",
+    "Add a second sprite to fall from the sky, like an apple.",
+    "For the apple, use 'go to x: (pick random -220 to 220) y: 180', then 'change y by -5' inside a loop so it falls.",
+    "Make a variable called Score. When the apple is touching the catcher, add 1 to Score and send the apple back to the top.",
+    "If the apple reaches the bottom, send it back to the top without adding points.",
+    "Add a timer or a 'lives' variable so the game can end.",
+    "Click Share to post your game, and look at other people's catch games for ideas."
+   ],
+   "createdAt": 1792000000002
+  },
+  "dance-party": {
+   "title": "Code a dance party",
+   "blurb": "Program dancers to move to the beat of real songs. A quick first taste of coding with blocks.",
+   "track": "software",
+   "level": 0,
+   "minGrade": 3,
+   "maxGrade": 8,
+   "time": "About 1 hour",
+   "interests": [
+    "code",
+    "design"
+   ],
+   "tools": [],
+   "credit": {
+    "name": "Code.org",
+    "url": "https://code.org/dance"
+   },
+   "source": "",
+   "materials": [
+    "A computer or tablet with a web browser"
+   ],
+   "steps": [
+    "Go to code.org/dance and start the activity.",
+    "Pick a song you like.",
+    "Follow the short puzzles to learn how to add dancers and set their moves.",
+    "Use 'every 2 measures' style blocks to change moves on the beat.",
+    "Add background effects that change during the song.",
+    "On the free play level, build your own routine from scratch.",
+    "Click Share to get a link to your dance party."
+   ],
+   "createdAt": 1792000000003
+  },
+  "tinkercad-armor": {
+   "title": "Design armor and gear in Tinkercad",
+   "blurb": "Learn 3D design by building a shield, helmet, or sword from simple shapes, then get it ready to 3D print.",
+   "track": "hardware",
+   "level": 0,
+   "minGrade": 5,
+   "maxGrade": 10,
+   "time": "About 1 to 2 hours",
+   "interests": [
+    "design",
+    "engineering"
+   ],
+   "tools": [
+    "3D printing"
+   ],
+   "credit": {
+    "name": "Hack Club Jams",
+    "url": "https://jams.hackclub.com/batch/3d-armory"
+   },
+   "source": "https://github.com/hackclub/jams",
+   "materials": [
+    "A computer with a web browser",
+    "A free Tinkercad account",
+    "A 3D printer at school or a library (optional)"
+   ],
+   "steps": [
+    "Make a free account at tinkercad.com and start a new 3D design.",
+    "Drag a basic shape, like a cylinder, onto the workplane for the body of your shield.",
+    "Use the handles to resize it. Hold Shift to keep the proportions even.",
+    "Add more shapes for details. Turn some shapes into Holes to cut into the main shape.",
+    "Select all the pieces and press Group to combine them.",
+    "Check that nothing floats in the air, since floating parts will not print.",
+    "Export the design as an STL file.",
+    "If you can, ask a teacher or librarian to print it, or share a screenshot of your design."
+   ],
+   "createdAt": 1792000000004
+  },
+  "sprig-game": {
+   "title": "Make your first game on Sprig",
+   "blurb": "Write a tile-based game in JavaScript in your browser. Hack Club mails teens a free Sprig console when their game is accepted.",
+   "track": "software",
+   "level": 1,
+   "minGrade": 6,
+   "maxGrade": 12,
+   "time": "About 2 to 4 hours",
+   "interests": [
+    "code",
+    "games"
+   ],
+   "tools": [
+    "JavaScript"
+   ],
+   "credit": {
+    "name": "Hack Club",
+    "url": "https://jams.hackclub.com/batch/sprig"
+   },
+   "source": "https://github.com/hackclub/sprig",
+   "materials": [
+    "A computer with a web browser",
+    "A GitHub account, to submit your game"
+   ],
+   "steps": [
+    "Open sprig.hackclub.com and start the tutorial in the editor.",
+    "Draw your sprites in the bitmap editor: a player, walls, and a goal.",
+    "Build your first level map with the map editor.",
+    "Use onInput to move the player with W, A, S, and D.",
+    "Set which sprites are solid so the player cannot walk through walls.",
+    "Add a win check: when the player reaches the goal, load the next level.",
+    "Add at least a few levels, plus sound or a twist that makes it yours.",
+    "Playtest it with a friend and fix anything confusing.",
+    "Follow the submission steps in the editor to send your game to the Sprig gallery on GitHub."
+   ],
+   "createdAt": 1792000000005
+  },
+  "visual-novel": {
+   "title": "Write a visual novel with Ren'Py",
+   "blurb": "Make a story game with characters, art, and choices that change the ending. Built for Hack Club's Storyboard program.",
+   "track": "software",
+   "level": 0,
+   "minGrade": 8,
+   "maxGrade": 12,
+   "time": "A weekend to start, then an hour a day",
+   "interests": [
+    "games",
+    "design",
+    "code"
+   ],
+   "tools": [
+    "Python"
+   ],
+   "credit": {
+    "name": "Hack Club Storyboard",
+    "url": "https://storyboard.hackclub.com/"
+   },
+   "source": "https://www.renpy.org/",
+   "materials": [
+    "A computer (Windows, Mac, or Linux)",
+    "Ren'Py, free from renpy.org",
+    "A drawing app for characters and backgrounds (optional)",
+    "GitHub and itch.io accounts, to publish"
+   ],
+   "steps": [
+    "Download Ren'Py from renpy.org and create a new project.",
+    "Plan your story on paper: the main character, the problem, and two or three endings.",
+    "Open script.rpy. Define your characters with Character(), giving each a name and color.",
+    "Write your first scene with dialogue lines.",
+    "Add backgrounds and character sprites with scene and show.",
+    "Add a menu so the player makes a choice, and use labels and jump to send each choice down a different path.",
+    "Playtest every path to make sure each ending works.",
+    "Build your game for web or desktop and upload it to itch.io.",
+    "Push your project to GitHub and submit it to Storyboard."
+   ],
+   "createdAt": 1792000000006
+  },
+  "blot-art": {
+   "title": "Code art for a drawing robot",
+   "blurb": "Write JavaScript that draws generative art, then send it to Blot, Hack Club's open source pen plotter.",
+   "track": "software",
+   "level": 1,
+   "minGrade": 7,
+   "maxGrade": 12,
+   "time": "About 2 hours",
+   "interests": [
+    "code",
+    "design"
+   ],
+   "tools": [
+    "JavaScript"
+   ],
+   "credit": {
+    "name": "Hack Club Blot",
+    "url": "https://blot.hackclub.com/"
+   },
+   "source": "https://github.com/hackclub/blot",
+   "materials": [
+    "A computer with a web browser"
+   ],
+   "steps": [
+    "Open the Blot editor at blot.hackclub.com.",
+    "Read through one of the beginner guides in the editor to see how drawings are made from lines.",
+    "Draw a simple shape, like a square, by listing its points.",
+    "Use a loop to repeat and rotate the shape across the page.",
+    "Add randomness so every run looks a little different.",
+    "Keep the drawing inside the page area so a plotter could draw it.",
+    "Export your art, then share it in the Blot gallery by following the guide on the site."
+   ],
+   "createdAt": 1792000000007
+  },
+  "sine-art": {
+   "title": "Make music and art from sine waves",
+   "blurb": "Use code to turn math into sound and moving pictures. A fun way to see how waves work.",
+   "track": "software",
+   "level": 1,
+   "minGrade": 7,
+   "maxGrade": 12,
+   "time": "About 1 to 2 hours",
+   "interests": [
+    "code",
+    "design"
+   ],
+   "tools": [
+    "JavaScript",
+    "HTML and CSS"
+   ],
+   "credit": {
+    "name": "Hack Club Jams",
+    "url": "https://jams.hackclub.com/batch/oscillart"
+   },
+   "source": "https://github.com/hackclub/jams",
+   "materials": [
+    "A computer with a web browser and a code editor"
+   ],
+   "steps": [
+    "Follow the Oscillart jam to set up an HTML page with a canvas and a button.",
+    "Use the Web Audio API to play a tone when the button is pressed.",
+    "Draw a sine wave on the canvas that matches the tone.",
+    "Let the user type notes and change the pitch and color.",
+    "Try changing amplitude and frequency and watch how the wave changes.",
+    "Publish your page and share it."
+   ],
+   "createdAt": 1792000000008
+  },
+  "web-os": {
+   "title": "Build your own web operating system",
+   "blurb": "Make a desktop that runs in the browser, with draggable windows and your own mini apps.",
+   "track": "software",
+   "level": 1,
+   "minGrade": 7,
+   "maxGrade": 12,
+   "time": "About 3 hours",
+   "interests": [
+    "code",
+    "design"
+   ],
+   "tools": [
+    "HTML and CSS",
+    "JavaScript"
+   ],
+   "credit": {
+    "name": "Hack Club Jams",
+    "url": "https://jams.hackclub.com/batch/webOS"
+   },
+   "source": "https://github.com/hackclub/jams",
+   "materials": [
+    "A computer with a code editor",
+    "A GitHub account, to publish with GitHub Pages"
+   ],
+   "steps": [
+    "Make an index.html with a desktop area and a taskbar.",
+    "Style it with CSS: wallpaper, icons, and a clock on the taskbar.",
+    "Make a window element with a title bar and a close button.",
+    "Write JavaScript so you can drag windows by their title bars.",
+    "Add apps that open in windows, like a notes app or a photo viewer.",
+    "Save notes in the browser so they stay after a refresh.",
+    "Publish your OS with GitHub Pages and share the link."
+   ],
+   "createdAt": 1792000000009
+  },
+  "godot-platformer": {
+   "title": "Build a platformer in Godot",
+   "blurb": "Make a 2D jumping game with the free Godot engine, then publish it so friends can play in a browser.",
+   "track": "software",
+   "level": 1,
+   "minGrade": 7,
+   "maxGrade": 12,
+   "time": "About 3 to 5 hours",
+   "interests": [
+    "games",
+    "code"
+   ],
+   "tools": [],
+   "credit": {
+    "name": "Hack Club Jams",
+    "url": "https://jams.hackclub.com/jam/godot-platformer"
+   },
+   "source": "https://godotengine.org/",
+   "materials": [
+    "A computer",
+    "Godot 4, free from godotengine.org",
+    "Free sprite art, like the packs on kenney.nl"
+   ],
+   "steps": [
+    "Download Godot 4 and create a new project.",
+    "Make a player scene with a CharacterBody2D, a sprite, and a collision shape.",
+    "Attach the built-in movement script template so the player can run and jump.",
+    "Make a level with a TileMap and paint some platforms.",
+    "Add coins with Area2D nodes that disappear and add to a score when touched.",
+    "Add a camera that follows the player.",
+    "Add a goal that loads the next level.",
+    "Export to Web and upload it to itch.io."
+   ],
+   "createdAt": 1792000000010
+  },
+  "weather-station": {
+   "title": "Build a weather station",
+   "blurb": "Wire a sensor to a Raspberry Pi, log temperature, humidity, and pressure, and graph the weather where you live.",
+   "track": "both",
+   "level": 1,
+   "minGrade": 7,
+   "maxGrade": 12,
+   "time": "About 3 to 4 hours",
+   "interests": [
+    "electronics",
+    "environment",
+    "code",
+    "ai"
+   ],
+   "tools": [
+    "Raspberry Pi",
+    "Python",
+    "Breadboards and wiring",
+    "Sensors and motors"
+   ],
+   "credit": {
+    "name": "Raspberry Pi Foundation",
+    "url": "https://github.com/raspberrypilearning/sensing-the-weather"
+   },
+   "source": "https://github.com/raspberrypilearning/sensing-the-weather",
+   "materials": [
+    "Raspberry Pi with power supply and SD card",
+    "BME280 sensor board",
+    "Jumper wires",
+    "Breadboard (optional)"
+   ],
+   "steps": [
+    "Set up Raspberry Pi OS and turn on I2C in the settings.",
+    "With the Pi off, wire the BME280: power to 3.3V, ground to ground, SDA to SDA, and SCL to SCL.",
+    "Install a Python library for the BME280 and print one reading to check it works.",
+    "Write a loop that reads temperature, humidity, and pressure every 5 minutes.",
+    "Save each reading with a timestamp to a CSV file.",
+    "Leave it running for a day, somewhere shaded outside or by a window.",
+    "Graph your data with Python and look for patterns, like when it is hottest.",
+    "Compare your readings to a local weather report."
+   ],
+   "safety": "Always unplug the Pi before changing wires.",
+   "createdAt": 1792000000011
+  },
+  "pcb-onboard": {
+   "title": "Design your own PCB",
+   "blurb": "Draw a circuit, lay out a real printed circuit board, and get it made. Hack Club's OnBoard program gives teens a grant to pay for manufacturing.",
+   "track": "hardware",
+   "level": 2,
+   "minGrade": 9,
+   "maxGrade": 12,
+   "time": "About 6 to 10 hours, plus shipping",
+   "interests": [
+    "electronics",
+    "engineering"
+   ],
+   "tools": [
+    "KiCad",
+    "Soldering"
+   ],
+   "credit": {
+    "name": "Hack Club OnBoard",
+    "url": "https://jams.hackclub.com/jam/onboard-grant"
+   },
+   "source": "https://github.com/hackclub/OnBoard",
+   "materials": [
+    "A computer with KiCad (free)",
+    "A GitHub account",
+    "Soldering iron and parts once your board arrives"
+   ],
+   "steps": [
+    "Pick a small first design, like an LED badge or a business card that lights up. The Hack Club Hacker Card jam is a good starting point.",
+    "Draw the schematic in KiCad: add parts, connect them, and run the electrical rules check.",
+    "Give every part a footprint so KiCad knows its real size.",
+    "Lay out the board: place parts, draw the board outline, and route the traces.",
+    "Run the design rules check and fix every error.",
+    "Export Gerber files and upload them to JLCPCB to see the price. Take a screenshot of your cart.",
+    "Fork the hackclub/OnBoard repo and add a folder for your project with a README, cart.png, gerber.zip, your design files, and schematic.pdf.",
+    "Open a pull request and follow the checklist to apply for the grant.",
+    "When the boards arrive, solder the parts on and test them. Post photos in the #onboard channel."
+   ],
+   "safety": "Soldering irons get very hot. Work in a ventilated space and wear eye protection.",
+   "createdAt": 1792000000012
+  },
+  "hackpad": {
+   "title": "Build a custom macropad",
+   "blurb": "Design the PCB, 3D-printed case, and firmware for your own mini keyboard of shortcut keys. Part of Hack Club Blueprint.",
+   "track": "both",
+   "level": 2,
+   "minGrade": 9,
+   "maxGrade": 12,
+   "time": "About 10 to 20 hours",
+   "interests": [
+    "electronics",
+    "engineering",
+    "code",
+    "design"
+   ],
+   "tools": [
+    "KiCad",
+    "CAD (Fusion or Onshape)",
+    "3D printing",
+    "Python",
+    "C"
+   ],
+   "credit": {
+    "name": "Hack Club Blueprint",
+    "url": "https://blueprint.hackclub.com/hackpad/submitting"
+   },
+   "source": "https://github.com/hackclub/hackpad",
+   "materials": [
+    "A computer with KiCad and a CAD program",
+    "A GitHub account",
+    "Parts from Hack Club's approved list (Seeed XIAO RP2040, switches, keycaps)"
+   ],
+   "steps": [
+    "Look at the example macropads in the hackclub/hackpad repo to see what a finished project includes.",
+    "Plan your layout. You get fewer than 16 inputs, like keys or knobs.",
+    "Draw the schematic in KiCad using the Seeed XIAO RP2040 as the brain.",
+    "Lay out a two-layer PCB that fits within 100 by 100 mm, and export Gerbers.",
+    "Design a 3D-printed case in CAD that fits within 200 by 200 by 100 mm.",
+    "Write firmware with QMK or KMK so each key does something useful.",
+    "Make a GitHub repo with CAD, PCB, Firmware, and production folders, plus a README with screenshots and a parts list.",
+    "Post your project in #blueprint-drafts on Hack Club Slack and submit it for design review."
+   ],
+   "createdAt": 1792000000013
+  },
+  "genelab-data": {
+   "title": "Analyze real spaceflight gene data",
+   "blurb": "Use NASA's open data to see which genes change in mice that flew in space. Real biology meets real coding.",
+   "track": "software",
+   "level": 2,
+   "minGrade": 9,
+   "maxGrade": 12,
+   "time": "About 4 to 6 hours",
+   "interests": [
+    "biology",
+    "ai",
+    "code",
+    "space"
+   ],
+   "tools": [
+    "Python"
+   ],
+   "credit": {
+    "name": "NASA Open Science Data Repository",
+    "url": "https://osdr.nasa.gov/bio/"
+   },
+   "source": "https://osdr.nasa.gov/bio/",
+   "materials": [
+    "A computer with a web browser",
+    "A free Google account for Google Colab"
+   ],
+   "steps": [
+    "Go to NASA's Open Science Data Repository and search for a mouse spaceflight study with RNA sequencing data.",
+    "Read the study description: which tissue, how long in space, and what the control group was.",
+    "Download the differential expression table from the study's files.",
+    "Open Google Colab and load the table with pandas.",
+    "Filter for genes with an adjusted p-value under 0.05 and a large fold change.",
+    "Make a volcano plot with matplotlib, showing fold change against significance.",
+    "Pick the top 5 changed genes and look up what each one does.",
+    "Write a short summary: what changed in space, and why might that matter for astronauts?",
+    "If you like this, apply to NASA GeneLab for High Schools to go deeper."
+   ],
+   "createdAt": 1792000000014
+  }
+ },
+ "opps": {
+  "gl4hs": {
+   "title": "GeneLab for High Schools",
+   "org": "NASA Ames Research Center",
+   "type": "Summer program",
+   "where": "Online",
+   "cost": 0,
+   "minGrade": 10,
+   "maxGrade": 12,
+   "interests": [
+    "biology",
+    "code",
+    "ai",
+    "space"
+   ],
+   "blurb": "Learn how NASA studies what spaceflight does to living things, then analyze real omics data with bioinformatics tools in JupyterLab. Great if you like biology, computer science, or both.",
+   "when": "Online, self-paced, about 20 hours a week from June to August. Applications have opened in mid-February and closed in mid-March.",
+   "req": "Rising juniors and seniors, or seniors starting college in the fall. U.S. citizens or permanent residents at a U.S. high school, one biology course, and at least a 3.0 GPA.",
+   "link": "https://www.nasa.gov/ames/genelab-for-high-schools/",
+   "createdAt": 1792000000000,
+   "pays": false,
+   "date": null,
+   "minAge": null
+  },
+  "sees": {
+   "title": "NASA SEES summer internship",
+   "org": "UT Austin Center for Space Research and NASA",
+   "type": "Internship",
+   "where": "Austin, TX and online",
+   "costNote": "Check site for costs",
+   "minGrade": 10,
+   "maxGrade": 11,
+   "minAge": 15,
+   "interests": [
+    "space",
+    "environment",
+    "ai",
+    "code",
+    "engineering"
+   ],
+   "blurb": "Work on real Earth and space science projects with NASA experts, starting online and finishing with two weeks on site in Austin.",
+   "when": "Online work May to July, then about two weeks in Austin in July. The application has been due in late February.",
+   "req": "Current sophomores and juniors who turn 16 by early July. U.S. citizens only.",
+   "link": "https://www.csr.utexas.edu/sees-internship/",
+   "createdAt": 1792000000001,
+   "cost": null,
+   "pays": false,
+   "date": null
+  },
+  "nasa-ostem": {
+   "title": "NASA internships for graduating seniors",
+   "org": "NASA Office of STEM Engagement",
+   "type": "Internship",
+   "where": "NASA centers and online",
+   "pays": true,
+   "minGrade": 12,
+   "maxGrade": 12,
+   "minAge": 17,
+   "date": "2027-03-01",
+   "interests": [
+    "space",
+    "engineering",
+    "code",
+    "biology",
+    "ai"
+   ],
+   "blurb": "Paid internships at NASA centers. High school seniors can apply for the summer right after they graduate.",
+   "when": "10-week summer session. Summer 2027 applications are due March 1, 2027.",
+   "req": "Must be 18 by the start date. U.S. citizens with at least a 3.0 GPA.",
+   "link": "https://www.nasa.gov/learning-resources/internship-programs/",
+   "createdAt": 1792000000002,
+   "cost": null
+  },
+  "ssp": {
+   "title": "Summer Science Program",
+   "org": "Summer Science Program",
+   "type": "Summer program",
+   "where": "College campuses",
+   "costNote": "Free with aid",
+   "minGrade": 11,
+   "maxGrade": 11,
+   "minAge": 15,
+   "interests": [
+    "space",
+    "biology",
+    "code"
+   ],
+   "blurb": "Live on a college campus and do a real research project in a small team: astrophysics, biochemistry, bacterial genomics, or cell biology.",
+   "when": "About six weeks in summer. Apply during junior year and check ssp.org for this year's deadline.",
+   "req": "High school juniors, ages 15 to 18. Free for families earning $75,000 or less, with discounts above that.",
+   "link": "https://ssp.org/",
+   "createdAt": 1792000000003,
+   "cost": null,
+   "pays": false,
+   "date": null
+  },
+  "cosmos": {
+   "title": "COSMOS",
+   "org": "University of California",
+   "type": "Summer program",
+   "where": "UCLA and other UC campuses",
+   "costNote": "Fee, aid available",
+   "minGrade": 8,
+   "maxGrade": 12,
+   "interests": [
+    "space",
+    "biology",
+    "engineering",
+    "code",
+    "environment",
+    "robots"
+   ],
+   "blurb": "Four weeks living at a UC campus, taking college-level STEM courses. UCLA is one of the five campuses, so this one is close to home.",
+   "when": "Four weeks in summer. Applications usually open in winter.",
+   "req": "Students finishing grades 8 to 12. Financial aid is available for application and program costs.",
+   "link": "https://cosmos-ucop.ucdavis.edu/",
+   "createdAt": 1792000000004,
+   "cost": null,
+   "pays": false,
+   "date": null,
+   "minAge": null
+  },
+  "rsi": {
+   "title": "Research Science Institute",
+   "org": "Center for Excellence in Education at MIT",
+   "type": "Summer program",
+   "where": "Cambridge, MA",
+   "cost": 0,
+   "minGrade": 11,
+   "maxGrade": 11,
+   "interests": [
+    "space",
+    "biology",
+    "code",
+    "engineering",
+    "ai"
+   ],
+   "blurb": "Six weeks at MIT doing your own research project with a mentor, then presenting it like a scientist. Very selective.",
+   "when": "Six weeks in summer. Applications are usually due in December of junior year.",
+   "req": "High school juniors. Free to attend.",
+   "link": "https://www.cee.org/programs/research-science-institute",
+   "createdAt": 1792000000005,
+   "pays": false,
+   "date": null,
+   "minAge": null
+  },
+  "mites": {
+   "title": "MITES Summer",
+   "org": "MIT",
+   "type": "Summer program",
+   "where": "Cambridge, MA",
+   "cost": 0,
+   "minGrade": 11,
+   "maxGrade": 11,
+   "interests": [
+    "engineering",
+    "code",
+    "biology",
+    "space"
+   ],
+   "blurb": "Six weeks of college-level math, science, and engineering classes at MIT, free of cost.",
+   "when": "Six weeks in summer. Applications are usually due around February 1 of junior year.",
+   "req": "High school juniors. Check the site for full eligibility.",
+   "link": "https://mites.mit.edu/",
+   "createdAt": 1792000000006,
+   "pays": false,
+   "date": null,
+   "minAge": null
+  },
+  "cac": {
+   "title": "Congressional App Challenge",
+   "org": "U.S. House of Representatives",
+   "type": "Competition",
+   "where": "Online",
+   "cost": 0,
+   "minGrade": 6,
+   "maxGrade": 12,
+   "date": "2026-10-26",
+   "interests": [
+    "code",
+    "games",
+    "design",
+    "ai"
+   ],
+   "blurb": "Build any app and submit it to your member of Congress. Winners get recognized and their apps are shown in the U.S. Capitol.",
+   "when": "The 2026 deadline is October 26, 2026.",
+   "req": "Middle and high school students. Work alone or in a team of up to four.",
+   "link": "https://www.congressionalappchallenge.us/",
+   "createdAt": 1792000000007,
+   "pays": false,
+   "minAge": null
+  },
+  "storyboard": {
+   "title": "Storyboard",
+   "org": "Hack Club",
+   "type": "Online program",
+   "where": "Online",
+   "cost": 0,
+   "minGrade": 8,
+   "maxGrade": 12,
+   "minAge": 13,
+   "interests": [
+    "games",
+    "design",
+    "code"
+   ],
+   "blurb": "Make a visual novel and publish it on itch.io. During Storyboardtober you earn a sticker for each day you work, plus bigger prizes at the end.",
+   "when": "Storyboardtober runs through October.",
+   "req": "Teens ages 13 to 18.",
+   "link": "https://storyboard.hackclub.com/",
+   "createdAt": 1792000000008,
+   "pays": false,
+   "date": null
+  },
+  "sprig": {
+   "title": "Sprig",
+   "org": "Hack Club",
+   "type": "Online program",
+   "where": "Online",
+   "cost": 0,
+   "minGrade": 3,
+   "maxGrade": 12,
+   "interests": [
+    "code",
+    "games"
+   ],
+   "blurb": "Make a JavaScript game in the Sprig editor. If it's accepted into the gallery, Hack Club mails you a free Sprig console to play it on.",
+   "when": "Open year round.",
+   "req": "Teenagers and younger get a free console. Anyone can make games.",
+   "link": "https://sprig.hackclub.com/",
+   "createdAt": 1792000000009,
+   "pays": false,
+   "date": null,
+   "minAge": null
+  },
+  "hackclub-clubs": {
+   "title": "Start or join a Hack Club",
+   "org": "Hack Club",
+   "type": "Club",
+   "where": "Your school",
+   "cost": 0,
+   "minGrade": 7,
+   "maxGrade": 12,
+   "interests": [
+    "code",
+    "electronics",
+    "games",
+    "design",
+    "ai"
+   ],
+   "blurb": "A free coding club run by students. You get workshops, events, and a big online community of teen makers.",
+   "when": "Year round.",
+   "req": "Teens. Every Hack Club program is free.",
+   "link": "https://hackclub.com/clubs",
+   "createdAt": 1792000000010,
+   "pays": false,
+   "date": null,
+   "minAge": null
+  },
+  "space-apps": {
+   "title": "NASA Space Apps Challenge",
+   "org": "NASA",
+   "type": "Hackathon",
+   "where": "Online and local sites",
+   "cost": 0,
+   "minGrade": 3,
+   "maxGrade": 12,
+   "interests": [
+    "space",
+    "code",
+    "ai",
+    "environment",
+    "design"
+   ],
+   "blurb": "A worldwide weekend hackathon where teams solve real challenges using NASA data.",
+   "when": "Every October. Watch for registration for the next one.",
+   "req": "Open to all ages. Students under 18 need a parent or guardian's permission.",
+   "link": "https://www.spaceappschallenge.org/",
+   "createdAt": 1792000000011,
+   "pays": false,
+   "date": null,
+   "minAge": null
+  },
+  "first": {
+   "title": "FIRST robotics teams",
+   "org": "FIRST",
+   "type": "Competition",
+   "where": "Your school or community",
+   "costNote": "Team fees vary",
+   "minGrade": 3,
+   "maxGrade": 12,
+   "interests": [
+    "robots",
+    "engineering",
+    "code"
+   ],
+   "blurb": "Build and program robots on a team. FIRST LEGO League is for younger kids. FIRST Tech Challenge and FIRST Robotics Competition are for middle and high school.",
+   "when": "Seasons start in the fall. Find a team near you on the FIRST site.",
+   "req": "Different leagues for different ages.",
+   "link": "https://www.firstinspires.org/",
+   "createdAt": 1792000000012,
+   "cost": null,
+   "pays": false,
+   "date": null,
+   "minAge": null
+  },
+  "gwc": {
+   "title": "Girls Who Code Clubs",
+   "org": "Girls Who Code",
+   "type": "Club",
+   "where": "Your school or online",
+   "cost": 0,
+   "minGrade": 3,
+   "maxGrade": 12,
+   "interests": [
+    "code",
+    "games",
+    "design",
+    "ai"
+   ],
+   "blurb": "Free coding clubs where you learn to code by building projects that matter to you.",
+   "when": "Year round.",
+   "req": "Open to girls and non-binary students. Check the site for details.",
+   "link": "https://girlswhocode.com/programs/clubs",
+   "createdAt": 1792000000013,
+   "pays": false,
+   "date": null,
+   "minAge": null
+  },
+  "scioly": {
+   "title": "Science Olympiad",
+   "org": "Science Olympiad",
+   "type": "Competition",
+   "where": "Your school",
+   "costNote": "Team fees vary",
+   "minGrade": 6,
+   "maxGrade": 12,
+   "interests": [
+    "biology",
+    "space",
+    "engineering",
+    "environment",
+    "robots"
+   ],
+   "blurb": "Team science competition with events in biology, earth science, astronomy, engineering, and building.",
+   "when": "Teams form in the fall and compete in winter and spring.",
+   "req": "Middle and high school teams through your school.",
+   "link": "https://www.soinc.org/",
+   "createdAt": 1792000000014,
+   "cost": null,
+   "pays": false,
+   "date": null,
+   "minAge": null
+  },
+  "griffith-star": {
+   "title": "Free public star parties at Griffith Observatory",
+   "org": "Los Angeles Astronomical Society",
+   "type": "Event",
+   "where": "Griffith Park",
+   "cost": 0,
+   "minGrade": 3,
+   "maxGrade": 12,
+   "interests": [
+    "space"
+   ],
+   "blurb": "Look through telescopes on the observatory lawn with volunteer astronomers who explain what you're seeing.",
+   "when": "Usually once a month. Check the observatory calendar for dates.",
+   "req": "Everyone.",
+   "link": "https://griffithobservatory.org/",
+   "createdAt": 1792000000015,
+   "pays": false,
+   "date": null,
+   "minAge": null
+  }
+ }
+}

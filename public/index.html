@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Workbench</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:dark;
+  --night:#0B0A1F; --deep:#17123A; --violet:#33256C; --orchid:#7B4E9E; --rose:#D88BBE;
+  --ink:#F4F1FF; --muted:#B9B0DC; --dim:#8F86B8;
+  --glass:rgba(16,12,42,.42); --glass2:rgba(26,19,62,.58); --edge:rgba(255,255,255,.13); --edge2:rgba(255,255,255,.24);
+  --lav:#C7B6FF; --lav-ink:#1B1240; --star:#FFE2A1; --mint:#9DE4C6; --warn:#FFB1A1;
+  --display:"Unbounded","Avenir Next",system-ui,sans-serif;
+  --body:"Instrument Sans","Avenir Next","Segoe UI",system-ui,sans-serif;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--night:#0B0A1F;--ink:#F4F1FF}}
+:root[data-theme="dark"]{--night:#0B0A1F;--ink:#F4F1FF}
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--night)}
+body{margin:0;min-height:100vh;color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;background:#0B0A1F}
+.bgfx{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(48vw 34vh at 85% 30%,rgba(216,139,190,.18),transparent 70%),
+   radial-gradient(52vw 40vh at 10% 70%,rgba(123,78,158,.28),transparent 70%),
+   radial-gradient(70vw 30vh at 50% 108%,rgba(255,200,230,.25),transparent 70%),
+   linear-gradient(180deg,#0B0A1F 0%,#15113A 30%,#2A1E62 58%,#55388A 82%,#A86BA6 100%)}
+.bgfx::before{content:"";position:absolute;inset:0;opacity:.75;
+  background-image:
+   radial-gradient(1.2px 1.2px at 12% 18%,#fff 60%,transparent),radial-gradient(1px 1px at 27% 62%,#fff 60%,transparent),
+   radial-gradient(1.4px 1.4px at 44% 9%,#fff 60%,transparent),radial-gradient(1px 1px at 58% 41%,#fff 60%,transparent),
+   radial-gradient(1.3px 1.3px at 71% 23%,#fff 60%,transparent),radial-gradient(1px 1px at 86% 57%,#fff 60%,transparent),
+   radial-gradient(1px 1px at 93% 12%,#fff 60%,transparent),radial-gradient(1.2px 1.2px at 6% 79%,#fff 60%,transparent),
+   radial-gradient(1px 1px at 35% 88%,#fff 60%,transparent),radial-gradient(1px 1px at 79% 84%,#fff 60%,transparent),
+   radial-gradient(1px 1px at 18% 43%,rgba(255,255,255,.7) 60%,transparent),radial-gradient(1px 1px at 64% 71%,rgba(255,255,255,.7) 60%,transparent)}
+img{max-width:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--star);outline-offset:3px;border-radius:8px}
+a{color:var(--lav)}
+.wrap{position:relative;z-index:1;max-width:1040px;margin:0 auto;padding:0 20px 80px}
+
+/* header */
+header.top{position:sticky;top:0;z-index:10;margin:0 -20px;padding:14px 20px 0;
+  background:linear-gradient(180deg,rgba(11,10,31,.92),rgba(11,10,31,.72));-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--edge)}
+.brand{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:500;font-size:1.05rem;letter-spacing:.01em}
+.logo svg{width:28px;height:28px;flex-shrink:0}
+.acct{display:flex;align-items:center;gap:8px;border:1px solid var(--edge);background:var(--glass);border-radius:999px;padding:4px 12px 4px 4px;font-weight:600;font-size:.9rem;cursor:pointer;max-width:55%}
+.acct:hover{border-color:var(--edge2)}
+.acct .av{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--lav),var(--rose));color:var(--lav-ink);display:grid;place-items:center;font-weight:700;font-size:.82rem;flex-shrink:0}
+.acct .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+nav.tabs{display:flex;gap:26px;margin-top:8px;overflow-x:auto;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{border:0;background:none;padding:10px 0 12px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+nav.tabs button:hover{color:var(--ink)}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--star)}
+nav.tabs .n{font-weight:500;color:var(--dim);margin-left:4px}
+
+/* type */
+h1,h2,h3{margin:0;font-weight:500}
+h1,h2{font-family:var(--display);letter-spacing:-.01em}
+h1{font-size:clamp(1.8rem,4.6vw,2.9rem);line-height:1.08}
+h2{font-size:clamp(1.2rem,2.6vw,1.45rem);line-height:1.2}
+h3{font-family:var(--body);font-size:1.08rem;font-weight:600;line-height:1.3}
+.sub{color:var(--muted);margin:8px 0 0;max-width:62ch}
+.why{font-size:.9rem;color:var(--muted);margin:0}
+.desc{margin:8px 0 0;font-size:.95rem;color:#E6E1FA}
+.pagehead{padding-top:40px;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.rowhead{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin:56px 0 16px}
+.linkbtn{background:none;border:0;color:var(--lav);font-weight:600;cursor:pointer;padding:4px 0;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:28px;align-items:center;padding:56px 0 8px}
+.hero .sub{font-size:1.05rem}
+.hero .acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.sky{width:100%;height:auto;overflow:visible}
+.sky line{stroke:rgba(255,226,161,.45);stroke-width:1}
+.sky circle.s{fill:var(--star)}
+.sky circle.g{fill:rgba(255,226,161,.18)}
+.sky text{fill:var(--muted);font-family:var(--body);font-size:11px;font-weight:500}
+.sky .tw{animation:tw 4s ease-in-out infinite}
+.sky .tw:nth-of-type(3n){animation-delay:1.3s}.sky .tw:nth-of-type(3n+1){animation-delay:2.6s}
+@keyframes tw{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* cards */
+.card{background:var(--glass);border:1px solid var(--edge);border-radius:18px;padding:18px;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
+.list{display:grid;gap:12px}
+.pj{cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:8px;width:100%;transition:border-color .15s,background-color .15s}
+.pj:hover{border-color:var(--edge2);background:var(--glass2)}
+.pjtop{display:flex;align-items:center;gap:10px}
+.ico{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;flex-shrink:0;background:linear-gradient(140deg,rgba(199,182,255,.28),rgba(216,139,190,.18));border:1px solid var(--edge)}
+.ico svg{width:19px;height:19px}
+.pjtop .gr{font-size:.85rem;color:var(--muted)}
+.pjtop .sv{margin-left:auto;font-size:.8rem;font-weight:600;color:var(--star)}
+.pj p{margin:0;font-size:.93rem;color:var(--muted)}
+.credit{font-size:.84rem;color:var(--dim)}
+.credit a{color:var(--muted)}
+.chfoot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:auto;padding-top:12px;border-top:1px solid var(--edge);font-size:.84rem;color:var(--muted)}
+.lvl{display:inline-flex;align-items:center;gap:7px}
+.lvl .bars{display:inline-flex;gap:2px;align-items:flex-end}
+.lvl .bars i{width:4px;border-radius:1px;background:rgba(255,255,255,.2)}
+.lvl .bars i:nth-child(1){height:6px}.lvl .bars i:nth-child(2){height:9px}.lvl .bars i:nth-child(3){height:12px}.lvl .bars i:nth-child(4){height:15px}
+.lvl .bars i.on{background:var(--star)}
+.bar{height:4px;border-radius:4px;background:rgba(255,255,255,.12);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--mint)}
+
+.op .ophead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.op .org{margin:2px 0 0;color:var(--muted);font-size:.92rem}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px 18px;margin:14px 0 0;padding:12px 0 0;border-top:1px solid var(--edge)}
+.facts dt{font-size:.8rem;color:var(--dim);font-weight:600}
+.facts dd{margin:2px 0 0;font-size:.9rem}
+.op a.go{display:inline-block;margin-top:12px;font-weight:600;font-size:.93rem}
+.bm{flex-shrink:0;border:1px solid var(--edge);background:transparent;border-radius:999px;padding:5px 12px 5px 10px;font-size:.85rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;color:var(--muted)}
+.bm svg{width:14px;height:14px}
+.bm:hover{border-color:var(--edge2);color:var(--ink)}
+.bm[aria-pressed="true"]{color:var(--star);border-color:rgba(255,226,161,.5)}
+.bm[aria-pressed="true"] svg{fill:currentColor}
+
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;font-weight:500;padding:2px 10px;border-radius:999px;background:rgba(255,255,255,.08);color:#E4DEFA;line-height:1.7}
+.tag.free{background:rgba(157,228,198,.14);color:var(--mint);font-weight:600}
+.tag.match{background:rgba(255,226,161,.14);color:var(--star);font-weight:600}
+.tag.due{background:rgba(255,177,161,.14);color:var(--warn);font-weight:600}
+.tag.off{background:transparent;box-shadow:inset 0 0 0 1px var(--edge);color:var(--dim)}
+
+/* builds shelf */
+.shelf{display:flex;gap:14px;overflow-x:auto;padding:2px 2px 14px;scroll-snap-type:x mandatory;scrollbar-width:thin}
+.hl{flex:0 0 260px;scroll-snap-align:start;overflow:hidden;padding:0;display:flex;flex-direction:column}
+.hl img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+.hl .ph{aspect-ratio:4/3;background:rgba(255,255,255,.05);display:grid;place-items:center;color:var(--dim)}
+.hl .ph svg{width:32px;height:32px}
+.hl .b{padding:14px 16px 16px;display:flex;flex-direction:column;gap:4px;flex:1}
+.hl p{margin:0;font-size:.92rem;color:var(--muted)}
+.hl .who{margin-top:auto;padding-top:8px;font-size:.84rem;color:var(--dim)}
+
+/* filters */
+.filters{margin:24px 0 20px;display:grid;gap:12px}
+.search{display:flex;align-items:center;gap:10px;border:1px solid var(--edge);background:rgba(11,10,31,.45);border-radius:14px;padding:0 14px;max-width:560px}
+.search:focus-within{border-color:var(--lav)}
+.search svg{width:18px;height:18px;color:var(--dim);flex-shrink:0}
+.search input{flex:1;border:0;background:transparent;padding:12px 0;outline:none;min-width:0}
+.search input::placeholder{color:var(--dim)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.toolbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.toolbar .sep{width:1px;height:22px;background:var(--edge);margin:0 6px}
+.toggle{border:1px solid var(--edge);background:transparent;border-radius:999px;padding:5px 13px;font-weight:500;cursor:pointer;font-size:.88rem;color:#E4DEFA}
+.toggle:hover{border-color:var(--edge2)}
+.toggle[aria-pressed="true"]{background:var(--ink);color:var(--lav-ink);border-color:var(--ink)}
+.count{font-size:.88rem;color:var(--dim);margin:0 0 12px}
+
+/* buttons */
+.btn{border:1px solid var(--lav);background:var(--lav);color:var(--lav-ink);font-weight:600;padding:10px 18px;border-radius:12px;cursor:pointer;transition:filter .15s;text-decoration:none;display:inline-block}
+.btn:hover{filter:brightness(1.07)}
+.btn.ghost{background:var(--glass);color:var(--ink);border-color:var(--edge)}
+.btn.ghost:hover{border-color:var(--edge2);filter:none}
+.btn.small{padding:6px 12px;font-size:.88rem;border-radius:9px}
+.btn:disabled{opacity:.4;cursor:not-allowed;filter:none}
+
+/* onboarding */
+.quiz{padding-top:36px;max-width:600px}
+.qbrand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:500;margin-bottom:48px}
+.qbrand svg{width:26px;height:26px}
+.qstep{display:flex;justify-content:space-between;font-size:.88rem;color:var(--muted);margin-bottom:10px}
+.dots{display:flex;gap:4px;margin-bottom:34px}
+.dots i{height:3px;flex:1;border-radius:3px;background:rgba(255,255,255,.15)}
+.dots i.on{background:var(--star)}
+.options{display:grid;gap:8px;margin:26px 0}
+.options.two{grid-template-columns:1fr 1fr}
+.options.five{grid-template-columns:repeat(5,1fr)}
+.options.five .opt{justify-content:center;text-align:center}
+.options.five .opt::before{display:none}
+.opt{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--edge);background:var(--glass);border-radius:14px;padding:13px 14px;text-align:left;cursor:pointer;font-weight:600}
+.opt::before{content:"";flex-shrink:0;width:16px;height:16px;margin-top:3px;border-radius:50%;border:1.5px solid var(--dim)}
+.options.multi .opt::before{border-radius:4px}
+.opt:hover{border-color:var(--edge2)}
+.opt[aria-pressed="true"]{border-color:var(--star);background:rgba(255,226,161,.08)}
+.opt[aria-pressed="true"]::before{border-color:var(--star);background:var(--star);box-shadow:inset 0 0 0 3px var(--deep)}
+.opt small{display:block;font-weight:400;color:var(--muted);font-size:.86rem;margin-top:1px}
+.picks{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 28px}
+.textin{width:100%;border:1px solid var(--edge);background:var(--glass);border-radius:14px;padding:14px 16px;font-size:1.15rem;margin:26px 0 10px}
+.textin:focus{outline:none;border-color:var(--lav)}
+.qacts{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+
+/* dialog */
+dialog{border:1px solid var(--edge2);border-radius:22px;padding:0;max-width:640px;width:calc(100% - 28px);color:var(--ink);
+  background:linear-gradient(180deg,#1D1747,#141033);box-shadow:0 30px 80px rgba(0,0,0,.5)}
+dialog[open]{animation:rise .22s ease-out}
+dialog::backdrop{background:rgba(6,5,20,.6);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.dlg{padding:24px;max-height:86vh;overflow-y:auto}
+.dlghead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:6px}
+.dlghead h2{margin:0}
+.close{flex-shrink:0;border:1px solid var(--edge);background:var(--glass);border-radius:50%;width:36px;height:36px;cursor:pointer;display:grid;place-items:center}
+.close svg{width:14px;height:14px}
+.dlg h3{margin-top:24px}
+.dacts{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;align-items:center}
+.steps{list-style:none;padding:0;margin:10px 0 18px;display:grid;gap:6px;counter-reset:s}
+.steps li{counter-increment:s}
+.steps label{display:grid;grid-template-columns:22px 18px 1fr;gap:10px;align-items:start;cursor:pointer;padding:11px 12px;border-radius:12px;background:rgba(255,255,255,.05)}
+.steps label::before{content:counter(s);font-weight:700;color:var(--dim);text-align:right}
+.steps input{margin:4px 0 0;width:17px;height:17px;accent-color:var(--mint)}
+.steps .done span{text-decoration:line-through;color:var(--dim)}
+.mats{padding-left:20px;margin:8px 0;color:#E4DEFA}
+.mats li{margin:3px 0}
+.note{margin:18px 0 0;padding:12px 14px;border-radius:12px;background:rgba(255,255,255,.05);font-size:.9rem;color:var(--muted)}
+form.f{display:grid;gap:14px;margin-top:14px}
+form.f label{display:grid;gap:5px;font-weight:600;font-size:.9rem}
+form.f input:not([type=checkbox]),form.f select,form.f textarea{border:1px solid var(--edge);background:rgba(11,10,31,.5);border-radius:10px;padding:9px 11px;width:100%;font-weight:400}
+form.f select option{background:#1D1747}
+form.f input:focus,form.f select:focus,form.f textarea:focus{outline:none;border-color:var(--lav)}
+form.f legend{font-weight:600;font-size:.9rem;margin-bottom:6px}
+form.f fieldset{border:0;padding:0;margin:0}
+form.f .inline{display:flex!important;gap:8px;align-items:center;font-weight:500!important}
+form.f .hint{font-weight:400;color:var(--dim);font-size:.82rem}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.checks{display:flex;flex-wrap:wrap;gap:6px}
+.checks label{display:flex!important;align-items:center;gap:6px;font-weight:500!important;border:1px solid var(--edge);border-radius:999px;padding:4px 11px}
+.rowitem{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--edge)}
+.rowitem:first-child{padding-top:0}
+.rowitem:last-child{border-bottom:0;padding-bottom:0}
+.rowitem .acts{display:flex;gap:6px;flex-shrink:0}
+.thumb{width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0}
+.preview{max-height:180px;border-radius:10px}
+.toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--lav-ink);padding:10px 18px;border-radius:12px;font-weight:600;font-size:.94rem;opacity:0;transition:opacity .2s;pointer-events:none;z-index:50}
+.toast.show{opacity:1}
+.empty{margin:0;padding:26px 20px;text-align:center;color:var(--muted);border:1px dashed var(--edge2);border-radius:18px}
+.err{color:var(--warn);font-weight:600;font-size:.9rem;margin:0}
+.err:empty{display:none}
+@media (max-width:760px){
+  .hero{grid-template-columns:1fr;padding-top:36px;gap:8px}
+  .hero .sky{order:-1;max-width:420px}
+}
+@media (max-width:560px){
+  .options.two,.two{grid-template-columns:1fr}
+  .options.five{grid-template-columns:repeat(4,1fr)}
+  .hl{flex-basis:230px}
+  .op .ophead{flex-direction:column}
+  dialog{width:100%;max-width:none;margin:auto 0 0;border-radius:22px 22px 0 0;border-bottom:0}
+  .dlg{max-height:90vh;padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="bgfx" aria-hidden="true"></div>
+<div class="wrap">
+  <header class="top" id="top" hidden>
+    <div class="brand">
+      <div class="logo" id="logo"></div>
+      <button class="acct" id="acct">Account</button>
+    </div>
+    <nav class="tabs" role="tablist" id="tabs"></nav>
+  </header>
+  <main id="main"><p class="empty" style="margin-top:48px">Loading</p></main>
+</div>
+<dialog id="dlg"><div class="dlg" id="dlgBody"></div></dialog>
+<div class="toast" id="toast" role="status"></div>
+
+<script type="module">
+/* ---------- Firebase setup ----------
+   Paste the config from Firebase console > Project settings > Your apps > Web app.
+   Until you do, the app runs in local mode (saves on this device, no admin). */
+const FIREBASE_CONFIG={
+  apiKey:"PASTE_YOUR_API_KEY",
+  authDomain:"your-project.firebaseapp.com",
+  projectId:"your-project",
+  storageBucket:"your-project.appspot.com",
+  messagingSenderId:"",
+  appId:""
+};
+const SDK='https://www.gstatic.com/firebasejs/10.12.2/';
+let FB=null,fbUser=null,unsubSubs=null;
+async function connect(){
+  if(!FIREBASE_CONFIG.apiKey||FIREBASE_CONFIG.apiKey.startsWith('PASTE'))return false;
+  try{
+    const [A,F,U]=await Promise.all([import(SDK+'firebase-app.js'),import(SDK+'firebase-firestore.js'),import(SDK+'firebase-auth.js')]);
+    const app=A.initializeApp(FIREBASE_CONFIG);
+    FB={F,U,store:F.getFirestore(app),auth:U.getAuth(app)};
+    return true;
+  }catch(e){console.error('Firebase did not load',e);return false}
+}
+/* Small wrapper so the rest of the app talks to Firestore with simple calls. */
+function makeDb(){
+  const {F,store}=FB;
+  const wrap=s=>({id:s.id,exists:s.exists(),data:()=>s.data()});
+  return {
+    doc:p=>({
+      get:async()=>wrap(await F.getDoc(F.doc(store,p))),
+      set:o=>F.setDoc(F.doc(store,p),o),
+      delete:()=>F.deleteDoc(F.doc(store,p))
+    }),
+    collection:n=>({
+      onSnapshot:(cb,err)=>F.onSnapshot(F.collection(store,n),s=>cb({docs:s.docs.map(wrap)}),err),
+      add:o=>F.addDoc(F.collection(store,n),o)
+    }),
+    batchSet:async items=>{
+      for(let i=0;i<items.length;i+=400){
+        const b=F.writeBatch(store);
+        items.slice(i,i+400).forEach(([p,o])=>b.set(F.doc(store,p),o));
+        await b.commit();
+      }
+    }
+  };
+}
+async function signIn(){
+  if(!FB)return toast('Sign-in is not set up yet. Add your Firebase config first.');
+  try{await FB.U.signInWithPopup(FB.auth,new FB.U.GoogleAuthProvider())}
+  catch(e){if(e.code!=='auth/popup-closed-by-user'&&e.code!=='auth/cancelled-popup-request')toast('Sign-in did not work. Try again.')}
+}
+async function signOut(){if(FB){await FB.U.signOut(FB.auth);dlg.close();toast('Signed out')}}
+
+/* ---------- constants ---------- */
+const INTERESTS=[{id:'code',label:'Coding',s:'Code'},{id:'games',label:'Games',s:'Games'},{id:'ai',label:'AI and data',s:'Data'},{id:'robots',label:'Robotics',s:'Robots'},{id:'electronics',label:'Electronics',s:'Circuits'},{id:'engineering',label:'Building things',s:'Building'},{id:'space',label:'Space',s:'Space'},{id:'biology',label:'Biology and health',s:'Biology'},{id:'environment',label:'Environment',s:'Earth'},{id:'design',label:'Art and design',s:'Art'}];
+const GRADES=[3,4,5,6,7,8,9,10,11,12];
+const AGES=[8,9,10,11,12,13,14,15,16,17,18];
+const LEVELS=['No experience','Beginner','Intermediate','Experienced'];
+const LEVEL_HINT=['Never tried it yet','Done a tutorial or two','Built a few projects','I build things on my own'];
+const LANGS=['Scratch','Python','JavaScript','HTML and CSS','Java','C++','C','C#','Swift','Kotlin','Lua','Rust','Go','SQL','R'];
+const HWTOOLS=['Arduino','Raspberry Pi','ESP32','micro:bit','Breadboards and wiring','Soldering','Sensors and motors','3D printing','Laser cutting','CAD (Fusion or Onshape)','KiCad','VEX','LEGO robotics','Multimeter'];
+const HOODS=['Pacoima','San Fernando','Sylmar','Van Nuys','North Hollywood','Panorama City','Arleta','Sun Valley','Somewhere else'];
+const TYPES=['Summer program','Internship','Competition','Hackathon','Club','Online program','Event'];
+const TRACKS={software:'Software',hardware:'Hardware',both:'Software and hardware'};
+const PLEVELS=[['all','Any level'],['0','Never tried it'],['1','Beginner'],['2','Intermediate'],['3','Experienced']];
+
+/* ---------- icons ---------- */
+const LOGO='<svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="8" fill="#C7B6FF"/><path d="M14 6a8 8 0 0 1 0 16a5 8 0 0 0 0-16z" fill="#D88BBE"/><ellipse cx="14" cy="14" rx="13" ry="4.2" fill="none" stroke="#FFE2A1" stroke-width="1.4" transform="rotate(-22 14 14)"/><circle cx="24.6" cy="9.6" r="1.6" fill="#FFE2A1"/></svg>';
+const ICON={
+  software:'<path d="M9 7l-5 5 5 5M15 7l5 5-5 5"/>',
+  hardware:'<rect x="7" y="7" width="10" height="10" rx="1.5"/><path d="M10 3v4M14 3v4M10 17v4M14 17v4M3 10h4M3 14h4M17 10h4M17 14h4"/>',
+  both:'<path d="M14.7 6.3a4 4 0 0 0-5.2 5.2L4 17l3 3 5.5-5.5a4 4 0 0 0 5.2-5.2l-2.6 2.6-2.4-.6-.6-2.4z"/>',
+  photo:'<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 8"/>',
+  x:'<path d="M5 5l14 14M19 5L5 19"/>',
+  search:'<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/>',
+  mark:'<path d="M6 3.5h12v17l-6-4.2-6 4.2z"/>'
+};
+const ico=t=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[t]||ICON.both}</svg>`;
+const meter=l=>`<span class="lvl"><span class="bars" aria-hidden="true">${[0,1,2,3].map(i=>`<i class="${i<=l?'on':''}"></i>`).join('')}</span>${esc(LEVELS[l]||LEVELS[0])}</span>`;
+
+/* ---------- state ---------- */
+let db=null,user=null,assets=null,uid=null,isAdmin=false,localOnly=true;
+const D={challenges:[],opps:[],highlights:[],subs:[]};
+const S={profile:null,tab:'home',pq:'',oq:'',pInts:[],oInts:[],pFit:false,oFit:false,pLevel:'all',oType:'All',oSort:'match',savedTab:'p'};
+let Q=null;
+
+const $=s=>document.querySelector(s);
+const $$=s=>document.querySelectorAll(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clone=o=>JSON.parse(JSON.stringify(o));
+const lbl=id=>INTERESTS.find(i=>i.id===id)?.label||id;
+const img=id=>'/_blob/'+id;
+const hlSrc=h=>h.imageData||(h.imageId?img(h.imageId):'');
+const ord=g=>g+(g===1?'st':g===2?'nd':g===3?'rd':'th');
+const today=new Date();today.setHours(0,0,0,0);
+function load(k,f){try{const v=localStorage.getItem(k);return v?JSON.parse(v):f}catch(e){return f}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('show'),2400)}
+let chain=Promise.resolve();
+function queue(fn){const p=chain.then(()=>fn());chain=p.catch(()=>{});return p}
+const profPath=()=>'data/users/'+uid+'/profile';
+$('#logo').innerHTML=LOGO+'Workbench';
+
+/* ---------- boot ---------- */
+function normalize(p){
+  if(!p)return p;
+  p.progress=p.progress||{};
+  p.saved=p.saved||{p:[],o:[]};p.saved.p=p.saved.p||[];p.saved.o=p.saved.o||[];
+  p.interests=(p.interests||[]).map(i=>i==='health'?'biology':i);
+  if(typeof p.age==='string')p.age=null;
+  p.langs=p.langs||[];p.hwTools=p.hwTools||[];
+  return p;
+}
+async function init(){
+  if(await connect()){
+    db=makeDb();
+    subscribe();
+    FB.U.onAuthStateChanged(FB.auth,u=>onUser(u));
+  }else{
+    S.profile=normalize(load('wb_profile',null));
+    if(S.profile&&(S.profile.grade==null||S.profile.age==null)){Q=newQ();Q.step=STEPS.findIndex(s=>s.key==='grade')}
+    render();
+  }
+}
+async function onUser(u){
+  fbUser=u;uid=u?u.uid:null;isAdmin=false;S.profile=null;Q=null;
+  let remote=false;
+  if(uid){
+    try{isAdmin=(await db.doc('admins/'+uid).get()).exists}catch(e){}
+    try{const s=await db.doc(profPath()).get();if(s.exists){S.profile=clone(s.data());remote=true}}catch(e){}
+  }
+  localOnly=!uid;
+  if(!S.profile)S.profile=load('wb_profile',null);
+  S.profile=normalize(S.profile);
+  if(uid&&S.profile&&!remote)saveProfile();
+  if(S.profile&&(S.profile.grade==null||S.profile.age==null)){Q=newQ();Q.step=STEPS.findIndex(s=>s.key==='grade')}
+  if(unsubSubs){unsubSubs();unsubSubs=null;D.subs=[]}
+  if(isAdmin){
+    unsubSubs=db.collection('submissions').onSnapshot(s=>{
+      D.subs=[];s.docs.forEach(d=>(d.data().items||[]).forEach(it=>D.subs.push({...it,owner:d.id})));refresh();
+    },e=>console.warn('subs',e));
+  }
+  if(S.tab==='admin'&&!isAdmin)S.tab='home';
+  render();
+}
+function subscribe(){
+  const sub=(name,sort)=>db.collection(name).onSnapshot(s=>{D[name]=s.docs.map(d=>({id:d.id,...d.data()})).sort(sort);refresh()},e=>console.warn(name,e));
+  sub('challenges',(a,b)=>(a.createdAt||0)-(b.createdAt||0));
+  sub('opps',(a,b)=>(a.createdAt||0)-(b.createdAt||0));
+  sub('highlights',(a,b)=>(b.createdAt||0)-(a.createdAt||0));
+}
+function refresh(){if(S.profile&&!Q&&!$('#dlg').open&&document.activeElement?.type!=='search')render()}
+async function saveProfile(){
+  save('wb_profile',S.profile);
+  if(localOnly)return;
+  try{await queue(()=>db.doc(profPath()).set(clone(S.profile)))}
+  catch(e){localOnly=true;toast('Saved on this device only')}
+}
+
+/* ---------- onboarding ---------- */
+const STEPS=[
+ {key:'name',kind:'text',q:'What should we call you?',sub:'A first name or nickname is fine. Nobody else sees your answers.'},
+ {key:'grade',q:'What grade are you in?',sub:'Programs pick students by grade, so this is how we sort what you can apply to.',five:true,opts:GRADES.map(g=>({id:g,label:ord(g)}))},
+ {key:'age',q:'How old are you?',sub:'Some programs also have an age minimum.',five:true,opts:AGES.map(a=>({id:a,label:String(a)}))},
+ {key:'sw',level:true,q:'How much coding have you done?',sub:'Games, apps, websites, anything with code.',listKey:'langs',list:LANGS,listQ:'Which languages have you used?'},
+ {key:'hw',level:true,q:'How much building have you done?',sub:'Circuits, robots, 3D printing, making things by hand.',listKey:'hwTools',list:HWTOOLS,listQ:'What have you worked with?'},
+ {key:'interests',multi:true,two:true,q:'What are you into?',sub:'Pick as many as you like. You can change these later.',opts:INTERESTS.map(i=>({id:i.id,label:i.label}))},
+ {key:'hood',two:true,q:'Where do you live?',sub:'We use this to find things close to you.',opts:HOODS.map(h=>({id:h,label:h}))}
+];
+function newQ(){return Object.assign({step:0,name:'',grade:null,age:null,sw:null,hw:null,langs:[],hwTools:[],interests:[],hood:null},S.profile?clone(S.profile):{},{step:0})}
+function startQuiz(){Q=newQ();render()}
+function renderQuiz(){
+  $('#top').hidden=true;
+  const st=STEPS[Q.step];let body='',ready=false;
+  if(st.kind==='text'){
+    ready=Q.name.trim().length>0;
+    body=`<input class="textin" id="nm" maxlength="30" placeholder="Your name" value="${esc(Q.name)}" autocomplete="given-name" aria-label="Your name">
+      <p class="why" style="margin-bottom:28px">${localOnly?(FB?'Your answers save on this device. <button class="linkbtn" id="qsign">Sign in with Google</button> to keep them on every device.':'Your answers save on this device.'):'Your answers save to your account, so they follow you to any device.'}</p>`;
+  }else if(st.level){
+    const v=Q[st.key];ready=v!=null;
+    body=`<div class="options two">${LEVELS.map((l,i)=>`<button class="opt" data-lv="${i}" aria-pressed="${v===i}"><span>${l}<small>${LEVEL_HINT[i]}</small></span></button>`).join('')}</div>
+      ${v>=2?`<h3>${st.listQ}</h3><div class="picks">${st.list.map(x=>`<button class="toggle" data-li="${esc(x)}" aria-pressed="${Q[st.listKey].includes(x)}">${esc(x)}</button>`).join('')}</div>`:''}`;
+  }else{
+    const v=Q[st.key];const picked=id=>st.multi?v.includes(id):v===id;ready=st.multi?v.length>0:v!=null;
+    body=`<div class="options ${st.two?'two':''} ${st.five?'five':''} ${st.multi?'multi':''}">${st.opts.map(o=>`<button class="opt" data-id="${esc(o.id)}" aria-pressed="${picked(o.id)}"><span>${esc(o.label)}</span></button>`).join('')}</div>`;
+  }
+  const last=Q.step===STEPS.length-1;
+  $('#main').innerHTML=`<section class="quiz">
+    <div class="qbrand">${LOGO}Workbench</div>
+    <div class="qstep"><span>${!S.profile?'A few quick questions to set you up':'Your answers'}</span><span>${Q.step+1} of ${STEPS.length}</span></div>
+    <div class="dots" aria-hidden="true">${STEPS.map((_,i)=>`<i class="${i<=Q.step?'on':''}"></i>`).join('')}</div>
+    <h1>${st.q}</h1><p class="sub">${st.sub}</p>${body}
+    <div class="qacts">
+      <button class="btn" id="next" ${ready?'':'disabled'}>${last?(S.profile?'Save my answers':'Create my account'):'Next'}</button>
+      ${Q.step>0?'<button class="btn ghost" id="back">Back</button>':''}
+      ${S.profile&&S.profile.grade!=null&&Q.step===0?'<button class="btn ghost" id="cancel">Cancel</button>':''}
+    </div></section>`;
+  const qs=$('#qsign');if(qs)qs.onclick=signIn;
+  const nm=$('#nm');if(nm){nm.oninput=()=>{Q.name=nm.value;$('#next').disabled=!nm.value.trim()};nm.onkeydown=e=>{if(e.key==='Enter'&&nm.value.trim())$('#next').click()};nm.focus()}
+  $$('[data-lv]').forEach(b=>b.onclick=()=>{Q[st.key]=+b.dataset.lv;render()});
+  $$('[data-li]').forEach(b=>b.onclick=()=>{const k=st.listKey,x=b.dataset.li;Q[k]=Q[k].includes(x)?Q[k].filter(y=>y!==x):[...Q[k],x];render()});
+  $$('[data-id]').forEach(b=>b.onclick=()=>{let id=b.dataset.id;if(st.five)id=+id;if(st.multi)Q[st.key]=Q[st.key].includes(id)?Q[st.key].filter(x=>x!==id):[...Q[st.key],id];else Q[st.key]=id;render()});
+  const bk=$('#back');if(bk)bk.onclick=()=>{Q.step--;render()};
+  const cn=$('#cancel');if(cn)cn.onclick=()=>{Q=null;render()};
+  $('#next').onclick=async()=>{
+    if(Q.step<STEPS.length-1){Q.step++;render();return}
+    const old=S.profile||{};
+    const p=normalize({name:Q.name.trim(),grade:Q.grade,age:Q.age,sw:Q.sw,hw:Q.hw,langs:Q.sw>=2?Q.langs:[],hwTools:Q.hw>=2?Q.hwTools:[],interests:Q.interests,hood:Q.hood,progress:old.progress||{},saved:old.saved});
+    const fresh=!S.profile;S.profile=p;Q=null;S.tab='home';render();window.scrollTo(0,0);
+    await saveProfile();if(!localOnly)toast(fresh?'Account created':'Answers saved');
+  };
+}
+
+/* ---------- matching ---------- */
+function fits(x){
+  const p=S.profile;
+  if(x.minGrade!=null&&p.grade<x.minGrade)return false;
+  if(x.maxGrade!=null&&p.grade>x.maxGrade)return false;
+  if(x.minAge&&p.age<x.minAge)return false;
+  return true;
+}
+const gradeText=x=>x.minGrade==null?'':x.minGrade===x.maxGrade?`Grade ${x.minGrade}`:`Grades ${x.minGrade}–${x.maxGrade??12}`;
+const isPast=o=>o.date&&new Date(o.date+'T23:59')<today;
+function scoreOpp(o){
+  const p=S.profile;
+  const shared=(o.interests||[]).filter(i=>p.interests.includes(i));
+  const ok=fits(o),near=o.where===p.hood,online=o.where==='Online';
+  const s=shared.length*3+(near?2:online?1:0)+(o.cost===0?.5:0)-(ok?0:20);
+  return {s,shared,ok,near,online};
+}
+function myLevel(c){const p=S.profile;return c.track==='software'?p.sw:c.track==='hardware'?p.hw:Math.round((p.sw+p.hw)/2)}
+function scoreCh(c){
+  const p=S.profile;const shared=(c.interests||[]).filter(i=>p.interests.includes(i));
+  const mine=p.langs.concat(p.hwTools);const known=(c.tools||[]).filter(t=>mine.includes(t));
+  const gap=(c.level||0)-myLevel(c);const ok=fits(c);
+  const s=shared.length*3+(gap===0?2:gap===1?1:gap<0?(gap===-1?.5:-1):-2)+known.length*2-(ok?0:20);
+  return {s,shared,known,ok};
+}
+function matches(x,q,ints){
+  if(ints.length&&!(x.interests||[]).some(i=>ints.includes(i)))return false;
+  if(!q.trim())return true;
+  const hay=[x.title,x.blurb,x.org,x.type,x.where,x.when,(x.tools||[]).join(' '),(x.interests||[]).map(lbl).join(' '),x.credit?.name,TRACKS[x.track]].join(' ').toLowerCase();
+  return q.toLowerCase().split(/\s+/).filter(Boolean).every(t=>hay.includes(t));
+}
+const isSavedP=id=>S.profile.saved.p.includes(id);
+const isSavedO=id=>S.profile.saved.o.includes(id);
+function toggleSave(kind,id,force){
+  const arr=S.profile.saved[kind];const has=arr.includes(id);
+  if(force===true&&has)return;
+  S.profile.saved[kind]=has?arr.filter(x=>x!==id):[...arr,id];
+  saveProfile();
+  return !has;
+}
+
+/* ---------- pieces ---------- */
+function dueTag(o){
+  if(!o.date)return '';const d=new Date(o.date+'T12:00');if(isNaN(d))return '';
+  const days=Math.round((d-today)/864e5);
+  if(days<0)return '<span class="tag off">Deadline passed</span>';
+  const t=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:d.getFullYear()!==today.getFullYear()?'numeric':undefined});
+  return `<span class="tag ${days<=30?'due':''}">${days<=30?`Due in ${days} day${days===1?'':'s'}, ${t}`:'Due '+t}</span>`;
+}
+function costTag(o){return o.pays?'<span class="tag free">Paid</span>':o.cost===0?'<span class="tag free">Free</span>':typeof o.cost==='number'?`<span class="tag">$${esc(o.cost)}</span>`:o.costNote?`<span class="tag">${esc(o.costNote)}</span>`:''}
+function oppCard(o){
+  const m=scoreOpp(o),r=[];
+  const ls=m.shared.map(x=>lbl(x).toLowerCase());
+  if(ls.length)r.push('you picked '+(ls.length<3?ls.join(' and '):ls.slice(0,-1).join(', ')+', and '+ls.at(-1)));
+  if(m.near)r.push('it is in your neighborhood');
+  const mt=!m.ok?`<span class="tag off">Not open to ${ord(S.profile.grade)} graders</span>`:m.s>=6?'<span class="tag match">Strong match</span>':m.s>=3?'<span class="tag match">Good match</span>':'';
+  const sv=isSavedO(o.id);
+  return `<article class="card op"><div class="ophead"><div><h3>${esc(o.title)}</h3><p class="org">${esc(o.org)}</p></div>
+    <button class="bm" data-save-o="${esc(o.id)}" aria-pressed="${sv}">${ico('mark')}${sv?'Saved':'Save'}</button></div>
+    <div class="meta">${mt}${dueTag(o)}${costTag(o)}<span class="tag">${esc(o.type)}</span><span class="tag">${esc(o.where)}</span>${gradeText(o)?`<span class="tag">${gradeText(o)}</span>`:''}</div>
+    <p class="desc">${esc(o.blurb)}</p>
+    ${(o.when||o.req)?`<dl class="facts">${o.when?`<div><dt>When</dt><dd>${esc(o.when)}</dd></div>`:''}${o.req?`<div><dt>Who can apply</dt><dd>${esc(o.req)}</dd></div>`:''}</dl>`:''}
+    ${r.length?`<p class="why" style="margin-top:12px">Matched because ${esc(r.join('. Also, '))}.</p>`:''}
+    <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">${o.link?`<a class="go" href="${esc(o.link)}" target="_blank" rel="noopener">Go to the official site</a>`:''}${isAdmin?`<button class="linkbtn" style="margin-top:12px" data-edit="opps|${esc(o.id)}">Edit</button>`:''}</div></article>`;
+}
+const prog=c=>((S.profile.progress||{})[c.id]||[]).filter(Boolean).length/((c.steps||[]).length||1);
+function chCard(c){
+  const pct=Math.round(prog(c)*100);
+  return `<button class="card pj" data-ch="${esc(c.id)}">
+    <div class="pjtop"><span class="ico">${ico(c.track)}</span><span class="gr">${gradeText(c)}</span>${isSavedP(c.id)?`<span class="sv">${pct===100?'Finished':'In my projects'}</span>`:''}</div>
+    <h3>${esc(c.title)}</h3><p>${esc(c.blurb)}</p>
+    ${c.credit?.name?`<span class="credit">From ${esc(c.credit.name)}</span>`:''}
+    ${pct?`<div class="bar" role="img" aria-label="${pct} percent done"><i style="width:${pct}%"></i></div>`:''}
+    <div class="chfoot">${meter(c.level||0)}<span>${esc(c.time)}</span></div></button>`;
+}
+function hlCard(h){return `<article class="card hl">${hlSrc(h)?`<img src="${esc(hlSrc(h))}" alt="${esc(h.title)}" loading="lazy">`:`<div class="ph">${ico('photo')}</div>`}
+  <div class="b"><h3>${esc(h.title)}</h3><p>${esc(h.blurb)}</p>
+  ${h.link?`<a href="${esc(h.link)}" target="_blank" rel="noopener">See the build</a>`:''}
+  <div class="who">${esc(h.name)}${h.age?', '+esc(h.age):''}${h.hood?', '+esc(h.hood):''}</div></div></article>`}
+function hash(s){let h=7;for(const c of String(s))h=(h*31+c.charCodeAt(0))>>>0;return h}
+function constellation(ids){
+  const pts=(ids.length?ids:['space']).slice(0,10);const n=pts.length,W=360,H=210;
+  const P=pts.map((id,i)=>{const x=n===1?W/2:30+i*(W-60)/(n-1);const hi=i%2===0;const y=(hi?62:142)+(hash(id)%26)-13;return {id,x,y,hi}});
+  const lines=P.slice(1).map((p,i)=>`<line x1="${P[i].x}" y1="${P[i].y}" x2="${p.x}" y2="${p.y}"/>`).join('');
+  const stars=P.map(p=>{const it=INTERESTS.find(x=>x.id===p.id);return `<circle class="g" cx="${p.x}" cy="${p.y}" r="9"/><circle class="s tw" cx="${p.x}" cy="${p.y}" r="3"/><text x="${p.x}" y="${p.hi?p.y-16:p.y+24}" text-anchor="middle">${esc(it?it.s:p.id)}</text>`}).join('');
+  const dust=[...Array(14)].map((_,i)=>{const h=hash('d'+i+ids.join());return `<circle cx="${h%W}" cy="${(h>>8)%H}" r="${(h%3)*.4+.5}" fill="#fff" opacity=".35"/>`}).join('');
+  return `<svg class="sky" viewBox="0 0 ${W} ${H}" role="img" aria-label="Your interests: ${esc(ids.map(lbl).join(', '))}">${dust}${lines}${stars}</svg>`;
+}
+const intChips=(key)=>`<div class="chips" role="group" aria-label="Filter by interest">${INTERESTS.map(i=>`<button class="toggle" data-int="${key}|${i.id}" aria-pressed="${S[key].includes(i.id)}">${i.label}</button>`).join('')}</div>`;
+const searchBox=(key,ph)=>`<label class="search">${ico('search')}<input type="search" id="q" data-q="${key}" placeholder="${ph}" value="${esc(S[key])}" aria-label="Search"></label>`;
+
+/* ---------- views ---------- */
+function vHome(){
+  const p=S.profile;
+  const opps=D.opps.filter(o=>!isPast(o)).map(o=>({o,m:scoreOpp(o)})).filter(x=>x.m.ok).sort((a,b)=>b.m.s-a.m.s);
+  const chs=D.challenges.map(c=>({c,m:scoreCh(c)})).filter(x=>x.m.ok).sort((a,b)=>b.m.s-a.m.s);
+  const mine=D.challenges.filter(c=>isSavedP(c.id)&&prog(c)<1);
+  return `<section class="hero"><div>
+      <h1>Hey ${esc(p.name)}, what are you building next?</h1>
+      <p class="sub">${chs.length||opps.length?`${chs.length} project${chs.length===1?'':'s'} and ${opps.length} program${opps.length===1?'':'s'} are open to ${ord(p.grade)} graders right now. These are sorted by what you picked.`:'Projects and programs are on the way. Check back soon.'}</p>
+      <div class="acts"><button class="btn" data-go="projects">Find a project</button><button class="btn ghost" data-go="opps">See programs</button></div>
+    </div>${constellation(p.interests)}</section>
+    ${mine.length?`<div class="rowhead"><div><h2>Keep going</h2><p class="sub">Projects you started.</p></div><button class="linkbtn" data-go="saved">My projects</button></div><div class="grid">${mine.slice(0,3).map(chCard).join('')}</div>`:''}
+    <div class="rowhead"><div><h2>Projects for you</h2><p class="sub">Matched to your grade, your experience, and what you like.</p></div><button class="linkbtn" data-go="projects">All projects</button></div>
+    ${chs.length?`<div class="grid">${chs.slice(0,6).map(x=>chCard(x.c)).join('')}</div>`:'<p class="empty">No projects fit your grade yet.</p>'}
+    <div class="rowhead"><div><h2>Programs to apply to</h2><p class="sub">Summer programs, internships, competitions, and clubs.</p></div><button class="linkbtn" data-go="opps">All programs</button></div>
+    <div class="list">${opps.length?opps.slice(0,3).map(x=>oppCard(x.o)).join(''):'<p class="empty">Nothing open to your grade is posted yet. Start a project in the meantime.</p>'}</div>
+    <div class="rowhead"><div><h2>Builds from the district</h2><p class="sub">Finished projects sent in by students.</p></div></div>
+    ${D.highlights.length?`<div class="shelf">${D.highlights.map(hlCard).join('')}</div>`:`<p class="empty">${isAdmin?'No builds featured yet. Add one from the Admin tab.':'Finish a project and send it in. Featured builds show up here.'}</p>`}`;
+}
+function projList(){
+  let l=D.challenges.filter(c=>matches(c,S.pq,S.pInts));
+  if(S.pFit)l=l.filter(fits);
+  if(S.pLevel!=='all')l=l.filter(c=>String(c.level||0)===S.pLevel);
+  l=l.map(c=>({c,s:scoreCh(c).s})).sort((a,b)=>b.s-a.s).map(x=>x.c);
+  return `<p class="count">${l.length} project${l.length===1?'':'s'}</p>`+(l.length?`<div class="grid">${l.map(chCard).join('')}</div>`:(D.challenges.length?'<p class="empty">Nothing matches. Clear the search or pick fewer filters.</p>':'<p class="empty">No projects posted yet.</p>'));
+}
+function vProjects(){
+  return `<section class="pagehead"><div><h1>Projects</h1><p class="sub">Step by step builds from Hack Club, NASA, and other makers. Start one to save it to My projects.</p></div>${isAdmin?'<button class="btn" id="addCh">Add project</button>':''}</section>
+    <div class="filters">${searchBox('pq','Search projects, tools, or topics')}${intChips('pInts')}
+      <div class="toolbar">${PLEVELS.map(([v,t])=>`<button class="toggle" data-plv="${v}" aria-pressed="${S.pLevel===v}">${t}</button>`).join('')}<span class="sep"></span><button class="toggle" id="pfit" aria-pressed="${S.pFit}">Only my grade</button></div></div>
+    <div id="results">${projList()}</div>`;
+}
+function oppList(){
+  let l=D.opps.filter(o=>!isPast(o)&&matches(o,S.oq,S.oInts)).map(o=>({o,m:scoreOpp(o)}));
+  if(S.oFit)l=l.filter(x=>x.m.ok);
+  if(S.oType!=='All')l=l.filter(x=>x.o.type===S.oType);
+  const dk=o=>o.date||'9999';
+  l.sort(S.oSort==='match'?(a,b)=>b.m.s-a.m.s||dk(a.o).localeCompare(dk(b.o)):(a,b)=>dk(a.o).localeCompare(dk(b.o))||b.m.s-a.m.s);
+  return `<p class="count">${l.length} program${l.length===1?'':'s'}</p>`+(l.length?`<div class="list">${l.map(x=>oppCard(x.o)).join('')}</div>`:(D.opps.length?'<p class="empty">Nothing matches. Clear the search, pick fewer filters, or turn off Only my grade.</p>':'<p class="empty">No programs posted yet.</p>'));
+}
+function vOpps(){
+  const btn=isAdmin?'<button class="btn" id="addOpp">Add program</button>':(!localOnly?'<button class="btn ghost" id="suggestOpp">Suggest a program</button>':'');
+  return `<section class="pagehead"><div><h1>Programs</h1><p class="sub">Summer programs, internships, competitions, clubs, and events. Dates change every year, so always check the official site.</p></div>${btn}</section>
+    <div class="filters">${searchBox('oq','Search programs, schools, or topics')}${intChips('oInts')}
+      <div class="toolbar">${['All',...TYPES].map(t=>`<button class="toggle" data-type="${t}" aria-pressed="${S.oType===t}">${t==='All'?'All types':t}</button>`).join('')}</div>
+      <div class="toolbar"><button class="toggle" id="ofit" aria-pressed="${S.oFit}">Only my grade</button><span class="sep"></span>
+        <button class="toggle" data-sort="match" aria-pressed="${S.oSort==='match'}">Best match</button>
+        <button class="toggle" data-sort="date" aria-pressed="${S.oSort==='date'}">Deadline soonest</button></div></div>
+    <div id="results">${oppList()}</div>`;
+}
+function vSaved(){
+  const ps=S.profile.saved.p.map(id=>D.challenges.find(c=>c.id===id)).filter(Boolean);
+  const os=S.profile.saved.o.map(id=>D.opps.find(o=>o.id===id)).filter(Boolean).sort((a,b)=>(a.date||'9999').localeCompare(b.date||'9999'));
+  const going=ps.filter(c=>prog(c)<1),done=ps.filter(c=>prog(c)>=1);
+  return `<section class="pagehead"><div><h1>Saved</h1><p class="sub">Projects you started and programs you want to apply to.</p></div></section>
+    <div class="filters"><div class="toolbar"><button class="toggle" data-st="p" aria-pressed="${S.savedTab==='p'}">My projects (${ps.length})</button><button class="toggle" data-st="o" aria-pressed="${S.savedTab==='o'}">Saved programs (${os.length})</button></div></div>
+    ${S.savedTab==='p'?(ps.length?`${going.length?`<div class="grid">${going.map(chCard).join('')}</div>`:''}${done.length?`<div class="rowhead"><h2>Finished</h2></div><div class="grid">${done.map(chCard).join('')}</div>`:''}`:'<p class="empty">Open any project and press Start project. It shows up here with your progress.</p>')
+    :(os.length?`<div class="list">${os.map(oppCard).join('')}</div>`:'<p class="empty">Press Save on any program to keep it here, sorted by deadline.</p>')}`;
+}
+function vAdmin(){
+  const row=(thumb,title,sub,acts)=>`<div class="rowitem">${thumb||''}<div style="flex:1;min-width:0"><b>${title}</b><div class="why">${sub}</div></div><div class="acts">${acts}</div></div>`;
+  const subs=D.subs.map(s=>row('',esc(s.kind==='build'?'Build: '+s.title:'Program: '+s.title),esc(s.kind==='build'?`${s.name||''}, ${s.blurb||''}`:`${s.org||''}${s.when?', '+s.when:''}`),
+    `<button class="btn small" data-approve="${esc(s.owner)}|${esc(s.sid)}">${s.kind==='build'?'Feature it':'Approve'}</button><button class="btn small ghost" data-dismiss="${esc(s.owner)}|${esc(s.sid)}">Dismiss</button>`)).join('');
+  const acts=(col,id,form=true)=>`${form?`<button class="btn small" data-edit="${col}|${esc(id)}">Edit</button>`:''}<button class="btn small ghost" data-raw="${col}|${esc(id)}">Raw data</button><button class="btn small ghost" data-del="${col}|${esc(id)}">Delete</button>`;
+  const hls=D.highlights.map(h=>row(hlSrc(h)?`<img class="thumb" src="${esc(hlSrc(h))}" alt="">`:'',esc(h.title),esc(`${h.name||''}${h.hood?', '+h.hood:''}`),acts('highlights',h.id,false))).join('');
+  const ops=D.opps.map(o=>row('',esc(o.title),esc(`${o.org}, ${gradeText(o)}${o.date?', due '+o.date:''}`),acts('opps',o.id))).join('');
+  const chs=D.challenges.map(c=>row(`<span class="ico">${ico(c.track)}</span>`,esc(c.title),esc(`${gradeText(c)}, ${LEVELS[c.level||0].toLowerCase()}${c.credit?.name?', from '+c.credit.name:''}`),acts('challenges',c.id))).join('');
+  const sec=(t,s,btn,body,empty)=>`<div class="rowhead"><div><h2>${t}</h2><p class="sub">${s}</p></div>${btn}</div><div class="card">${body||`<p class="why">${empty}</p>`}</div>`;
+  return `<section class="pagehead"><div><h1>Admin</h1><p class="sub">This is the database behind Workbench. Edit changes any item with a form. Raw data shows every field so you can change anything. Changes go live for everyone right away. Only accounts listed in the admins collection see this tab.</p></div></section>
+    <div class="dacts">${!D.challenges.length&&!D.opps.length?'<button class="btn" id="seed">Load starter projects and programs</button>':''}<button class="btn ghost" id="backup">Download a backup</button></div>
+    ${sec('Waiting for review','Suggestions from students and organizations.','',subs,'Nothing waiting right now.')}
+    ${sec('Featured builds','Shown on everyone\'s home page, newest first.','<button class="btn" id="addHl">Add build</button>',hls,'No builds featured yet.')}
+    ${sec('Programs','Listings students get matched to.','<button class="btn" id="addOpp">Add program</button>',ops,'No programs yet.')}
+    ${sec('Projects','Builds with step by step guides.','<button class="btn" id="addCh">Add project</button>',chs,'No projects yet.')}`;
+}
+
+function render(){
+  if(!S.profile&&!Q)Q=newQ();
+  if(Q){renderQuiz();return}
+  $('#top').hidden=false;
+  const ns=S.profile.saved.p.length+S.profile.saved.o.length;
+  const tabs=[['home','Home'],['projects','Projects'],['opps','Programs'],['saved','Saved',ns]].concat(isAdmin?[['admin','Admin']]:[]);
+  if(S.tab==='admin'&&!isAdmin)S.tab='home';
+  $('#tabs').innerHTML=tabs.map(([id,t,n])=>`<button role="tab" data-tab="${id}" aria-selected="${S.tab===id}">${t}${n?`<span class="n">${n}</span>`:''}</button>`).join('');
+  const nm=S.profile.name||'';
+  $('#acct').innerHTML=FB&&!uid?'<span class="nm" style="padding-left:8px">Sign in</span>':`<span class="av" aria-hidden="true">${esc(nm.charAt(0).toUpperCase())}</span><span class="nm">${esc(nm)}${isAdmin?', admin':''}</span>`;
+  const V={home:vHome,projects:vProjects,opps:vOpps,saved:vSaved,admin:vAdmin};
+  $('#main').innerHTML=(V[S.tab]||vHome)();
+  bind();
+}
+function go(t){S.tab=t;render();window.scrollTo(0,0)}
+function bindCards(root=document){
+  root.querySelectorAll('[data-ch]').forEach(b=>b.onclick=()=>openCh(b.dataset.ch));
+  root.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editItem(...b.dataset.edit.split('|')));
+  root.querySelectorAll('[data-save-o]').forEach(b=>b.onclick=()=>{
+    const on=toggleSave('o',b.dataset.saveO);b.setAttribute('aria-pressed',on);b.innerHTML=ico('mark')+(on?'Saved':'Save');
+    toast(on?'Saved':'Removed from saved');const n=$('[data-tab="saved"]');if(n)render();
+  });
+}
+function bind(){
+  $$('[data-tab]').forEach(b=>b.onclick=()=>go(b.dataset.tab));
+  $$('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+  bindCards();
+  const qi=$('#q');if(qi){qi.oninput=()=>{S[qi.dataset.q]=qi.value;const r=$('#results');r.innerHTML=qi.dataset.q==='pq'?projList():oppList();bindCards(r)}}
+  $$('[data-int]').forEach(b=>b.onclick=()=>{const [k,id]=b.dataset.int.split('|');S[k]=S[k].includes(id)?S[k].filter(x=>x!==id):[...S[k],id];render()});
+  $$('[data-plv]').forEach(b=>b.onclick=()=>{S.pLevel=b.dataset.plv;render()});
+  $$('[data-type]').forEach(b=>b.onclick=()=>{S.oType=b.dataset.type;render()});
+  $$('[data-sort]').forEach(b=>b.onclick=()=>{S.oSort=b.dataset.sort;render()});
+  $$('[data-st]').forEach(b=>b.onclick=()=>{S.savedTab=b.dataset.st;render()});
+  const on=(id,fn)=>{const e=$('#'+id);if(e)e.onclick=fn};
+  on('pfit',()=>{S.pFit=!S.pFit;render()});on('ofit',()=>{S.oFit=!S.oFit;render()});
+  on('addOpp',()=>oppForm('admin'));on('suggestOpp',()=>oppForm('suggest'));
+  on('addHl',()=>hlForm());on('addCh',()=>chForm());
+  on('seed',loadStarter);on('backup',backup);
+  $$('[data-del]').forEach(b=>b.onclick=()=>delItem(...b.dataset.del.split('|')));
+  $$('[data-edit]').forEach(b=>b.onclick=()=>editItem(...b.dataset.edit.split('|')));
+  $$('[data-raw]').forEach(b=>b.onclick=()=>rawForm(...b.dataset.raw.split('|')));
+  $$('[data-approve]').forEach(b=>b.onclick=()=>approve(...b.dataset.approve.split('|')));
+  $$('[data-dismiss]').forEach(b=>b.onclick=()=>dismiss(...b.dataset.dismiss.split('|')));
+}
+$('#acct').onclick=()=>FB&&!uid?signIn():openAccount();
+
+/* ---------- dialogs ---------- */
+const dlg=$('#dlg');
+function openDlg(title,html){const y=$('.dlg')?.scrollTop||0;$('#dlgBody').innerHTML=`<div class="dlghead"><h2>${title}</h2><button class="close" aria-label="Close" id="x">${ico('x')}</button></div>`+html;$('#x').onclick=()=>dlg.close();if(!dlg.open)dlg.showModal();else $('.dlg').scrollTop=y}
+dlg.addEventListener('close',()=>render());
+const opts=(arr,sel)=>arr.map(x=>{const [v,t]=Array.isArray(x)?x:[x,x];return `<option value="${esc(v)}" ${String(v)===String(sel)?'selected':''}>${esc(t)}</option>`}).join('');
+const topicChecks=(sel=[])=>`<fieldset><legend>Topics</legend><div class="checks">${INTERESTS.map(i=>`<label><input type="checkbox" name="i" value="${i.id}" ${sel.includes(i.id)?'checked':''}>${i.label}</label>`).join('')}</div></fieldset>`;
+const gradeSelects=(pre={})=>`<div class="two"><label>Lowest grade<select name="minGrade">${opts(GRADES.map(g=>[g,ord(g)]),pre.minGrade??3)}</select></label><label>Highest grade<select name="maxGrade">${opts(GRADES.map(g=>[g,ord(g)]),pre.maxGrade??12)}</select></label></div>`;
+const lines=s=>String(s||'').split('\n').map(x=>x.trim()).filter(Boolean);
+const okLink=s=>/^https?:\/\//.test(s||'')?s:'';
+
+function openAccount(){
+  const p=S.profile;
+  const r=(k,v)=>`<div class="rowitem"><span class="why">${k}</span><b style="text-align:right">${esc(v||'None')}</b></div>`;
+  openDlg(esc(p.name),`<p class="sub" style="margin:0 0 16px">${localOnly?'Saved on this device only.':'Saved to your account.'}${isAdmin?' You have admin access.':''}</p>
+    <div class="card">${r('Grade',ord(p.grade))}${r('Age',String(p.age))}${r('Coding',LEVELS[p.sw])}${p.langs.length?r('Languages',p.langs.join(', ')):''}${r('Building',LEVELS[p.hw])}${p.hwTools.length?r('Tools',p.hwTools.join(', ')):''}${r('Interests',p.interests.map(lbl).join(', '))}${r('Neighborhood',p.hood)}</div>
+    <div class="dacts"><button class="btn" id="edit">Edit my answers</button>${uid?'<button class="btn ghost" id="so">Sign out</button>':''}</div>
+    ${fbUser?`<p class="why" style="margin-top:14px">Signed in as ${esc(fbUser.email||'')}. Your user ID is <code>${esc(uid)}</code>.</p>`:''}`);
+  $('#edit').onclick=()=>{dlg.close();startQuiz()};
+  const so=$('#so');if(so)so.onclick=signOut;
+}
+function openCh(id){
+  const c=D.challenges.find(x=>x.id===id);if(!c)return;
+  const steps=c.steps||[];const pr=(S.profile.progress[id]||steps.map(()=>false)).slice(0,steps.length);
+  const done=pr.filter(Boolean).length,all=steps.length&&done===steps.length,sv=isSavedP(id);
+  const m=scoreCh(c);
+  openDlg(esc(c.title),`<p class="sub" style="margin:0">${esc(c.blurb)}</p>
+    <div class="meta" style="margin-top:14px">${m.ok?'':`<span class="tag off">Made for ${gradeText(c).toLowerCase()}</span>`}<span class="tag">${esc(TRACKS[c.track]||'')}</span><span class="tag">${esc(LEVELS[c.level||0])}</span><span class="tag">${esc(c.time)}</span>${gradeText(c)?`<span class="tag">${gradeText(c)}</span>`:''}${m.known.length?`<span class="tag free">Uses ${esc(m.known.join(', '))}</span>`:''}</div>
+    ${c.credit?.name?`<p class="credit" style="margin:14px 0 0">Guide adapted from <a href="${esc(okLink(c.credit.url)||'#')}" target="_blank" rel="noopener">${esc(c.credit.name)}</a>${c.source?`. Source: <a href="${esc(okLink(c.source))}" target="_blank" rel="noopener">${esc(c.source.replace(/^https?:\/\//,''))}</a>`:''}</p>`:''}
+    <div class="dacts">${sv?`<button class="btn ghost" id="unsave">Remove from My projects</button>`:`<button class="btn" id="start">Start project</button>`}${c.credit?.url?`<a class="btn ghost" href="${esc(okLink(c.credit.url))}" target="_blank" rel="noopener">Open the original guide</a>`:''}${isAdmin?`<button class="btn ghost" id="editch">Edit</button>`:''}</div>
+    ${(c.materials||[]).length?`<h3>What you need</h3><ul class="mats">${c.materials.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}
+    <h3 style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">Steps<span class="why" style="font-weight:500">${done} of ${steps.length} done</span></h3>
+    <ol class="steps">${steps.map((s,i)=>`<li class="${pr[i]?'done':''}"><label><input type="checkbox" data-step="${i}" ${pr[i]?'checked':''}><span>${esc(s)}</span></label></li>`).join('')}</ol>
+    ${c.safety?`<p class="note">${esc(c.safety)}</p>`:''}
+    ${localOnly?'<p class="why" style="margin-top:14px">Sign in to send your finished build to the team.</p>':`<div class="dacts"><button class="btn" id="share" ${all?'':'disabled'}>Send your build to the team</button>${all?'':'<span class="why">Check off every step to send it in.</span>'}</div>`}`);
+  const st=$('#start');if(st)st.onclick=()=>{toggleSave('p',id,true);toast('Added to My projects');openCh(id)};
+  const us=$('#unsave');if(us)us.onclick=()=>{toggleSave('p',id);toast('Removed from My projects');openCh(id)};
+  $$('[data-step]').forEach(cb=>cb.onchange=()=>{pr[+cb.dataset.step]=cb.checked;S.profile.progress[id]=[...pr];if(!isSavedP(id))S.profile.saved.p.push(id);saveProfile();openCh(id)});
+  const sh=$('#share');if(sh)sh.onclick=()=>buildForm(c);
+  const ec=$('#editch');if(ec)ec.onclick=()=>chForm(c);
+}
+function editItem(col,id){
+  const it=D[col].find(x=>x.id===id);if(!it)return;
+  if(col==='opps')oppForm('admin',it);else if(col==='challenges')chForm(it);else rawForm(col,id);
+}
+function rawForm(col,id){
+  const it=D[col].find(x=>x.id===id);if(!it)return;
+  const {id:_,...body}=it;
+  openDlg('Raw data',`<p class="sub" style="margin:0">Every field of "${esc(it.title||id)}" in the ${esc(col)} collection. Keep the JSON format: quotes around text, commas between fields.</p>
+   <form class="f" id="rf"><textarea name="j" rows="22" spellcheck="false" style="font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.84rem">${esc(JSON.stringify(body,null,2))}</textarea>
+   <p class="err" id="er"></p><div><button class="btn" type="submit">Save changes</button></div></form>`);
+  $('#rf').onsubmit=async e=>{e.preventDefault();let v;
+    try{v=JSON.parse(e.target.j.value)}catch(err){return $('#er').textContent='That is not valid JSON. Check for a missing comma or quote near: '+String(err.message).slice(0,80)}
+    if(!v||typeof v!=='object'||Array.isArray(v))return $('#er').textContent='The data has to be one object wrapped in curly braces.';
+    try{await queue(()=>db.doc(col+'/'+id).set(v));dlg.close();toast('Changes saved')}catch(err){$('#er').textContent='That did not save. Try again.'}};
+}
+async function submit(item){
+  const ref=db.doc('submissions/'+uid);let items=[];
+  try{const s=await ref.get();if(s.exists)items=clone(s.data().items||[])}catch(e){}
+  items.push({...item,sid:'s'+Date.now(),at:Date.now()});
+  await queue(()=>ref.set({items:items.slice(-20)}));
+}
+function buildForm(c){
+  openDlg('Send your build',`<p class="sub" style="margin:0">The team reviews it and may feature it on the home page.</p>
+    <form class="f" id="bf"><label>What did you call it?<input name="title" required maxlength="60" value="${esc(c.title)}"></label>
+    <label>One sentence about how it went<textarea name="blurb" required maxlength="140" rows="2"></textarea></label>
+    <label>Link to a photo, video, or demo<input name="link" type="url" placeholder="https://"></label>
+    <p class="err" id="er"></p><div><button class="btn" type="submit">Send to the team</button></div></form>`);
+  $('#bf').onsubmit=async e=>{e.preventDefault();const d=Object.fromEntries(new FormData(e.target));
+    try{await submit({kind:'build',challenge:c.title,title:d.title,blurb:d.blurb,link:okLink(d.link),name:S.profile.name,age:String(S.profile.age),hood:S.profile.hood});dlg.close();toast('Sent to the team')}
+    catch(err){$('#er').textContent='That did not send. Check your connection and try again.'}};
+}
+function oppForm(mode,pre={}){
+  const editing=mode==='admin'&&pre.id&&!pre._done;
+  openDlg(editing?'Edit program':mode==='admin'?'Add program':'Suggest a program',`<p class="sub" style="margin:0">${mode==='admin'?'Goes live for everyone right away.':'For schools, nonprofits, and local businesses. The team reviews it first.'}</p>
+   <form class="f" id="of">
+   <div class="two"><label>Organization<input name="org" required value="${esc(pre.org||'')}"></label>
+   <label>Type<select name="type">${opts(TYPES,pre.type)}</select></label></div>
+   <label>Title<input name="title" required maxlength="80" value="${esc(pre.title||'')}"></label>
+   <div class="two"><label>Cost in dollars <span class="hint">0 if free, blank if it varies</span><input name="cost" type="number" min="0" value="${esc(pre.cost??'')}"></label>
+   <label>Cost note <span class="hint">used when cost is blank</span><input name="costNote" maxlength="40" placeholder="Free with aid" value="${esc(pre.costNote||'')}"></label></div>
+   <label class="inline"><input type="checkbox" name="pays" ${pre.pays?'checked':''}> Students get paid</label>
+   <label>Where <span class="hint">a neighborhood, a city, or Online</span><input name="where" required list="hoods" value="${esc(pre.where||'Online')}"><datalist id="hoods">${HOODS.slice(0,-1).concat('Online').map(h=>`<option value="${esc(h)}">`).join('')}</datalist></label>
+   ${gradeSelects(pre)}
+   <div class="two"><label>Minimum age <span class="hint">blank if none</span><input name="minAge" type="number" min="5" max="25" value="${esc(pre.minAge||'')}"></label>
+   <label>Deadline <span class="hint">optional</span><input name="date" type="date" value="${esc(pre.date||'')}"></label></div>
+   <label>When <span class="hint">dates, timing, how often</span><input name="when" maxlength="160" value="${esc(pre.when||'')}"></label>
+   <label>Who can apply<input name="req" maxlength="200" value="${esc(pre.req||'')}"></label>
+   ${topicChecks(pre.interests)}
+   <label>Short description<textarea name="blurb" rows="3" maxlength="260" required>${esc(pre.blurb||'')}</textarea></label>
+   <label>Official link<input name="link" type="url" placeholder="https://" value="${esc(pre.link||'')}"></label>
+   <p class="err" id="er"></p><div><button class="btn" type="submit">${editing?'Save changes':mode==='admin'?'Publish program':'Send for review'}</button></div></form>`);
+  $('#of').onsubmit=async e=>{e.preventDefault();const fd=new FormData(e.target),d=Object.fromEntries(fd),ints=fd.getAll('i');
+    if(!ints.length)return $('#er').textContent='Pick at least one topic so students can find it.';
+    if(+d.minGrade>+d.maxGrade)return $('#er').textContent='Lowest grade has to be at or below highest grade.';
+    const o={org:d.org,title:d.title,type:d.type,cost:d.cost===''?null:+d.cost,costNote:d.costNote,pays:!!d.pays,where:d.where,minGrade:+d.minGrade,maxGrade:+d.maxGrade,minAge:d.minAge?+d.minAge:null,date:d.date||null,when:d.when,req:d.req,interests:ints,blurb:d.blurb,link:okLink(d.link)};
+    try{
+      if(editing){await queue(()=>db.doc('opps/'+pre.id).set({...o,createdAt:pre.createdAt||Date.now()}));toast('Changes saved')}
+      else if(mode==='admin'){await queue(()=>db.collection('opps').add({...o,createdAt:Date.now()}));if(pre._done)await pre._done();toast('Program published')}
+      else{await submit({kind:'opp',...o});toast('Sent for review')}
+      dlg.close();
+    }catch(err){$('#er').textContent='That did not save. Check your connection and try again.'}};
+}
+/* Shrinks a photo to a small JPEG stored inside the database document (no paid Storage plan needed). */
+async function shrink(file){
+  const url=URL.createObjectURL(file);
+  try{
+    const im=await new Promise((ok,bad)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=()=>bad({msg:'That file is not an image this browser can read. Try a JPG or PNG.'});i.src=url});
+    let w=im.naturalWidth,h=im.naturalHeight;const max=1000;if(w>max||h>max){const k=max/Math.max(w,h);w=Math.round(w*k);h=Math.round(h*k)}
+    const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(im,0,0,w,h);
+    let q=.8,out=c.toDataURL('image/jpeg',q);while(out.length>700000&&q>.4){q-=.1;out=c.toDataURL('image/jpeg',q)}
+    if(out.length>900000)throw {msg:'That photo is too detailed to store. Try a smaller one.'};
+    return out;
+  }finally{URL.revokeObjectURL(url)}
+}
+function hlForm(pre={}){
+  openDlg('Add build',`<p class="sub" style="margin:0">Shows on everyone's home page.</p>
+   <form class="f" id="hf">
+   <div class="two"><label>Builder's first name<input name="name" required maxlength="30" value="${esc(pre.name||'')}"></label>
+   <label>Age<input name="age" maxlength="10" value="${esc(pre.age||'')}"></label></div>
+   <label>Neighborhood<select name="hood">${opts(HOODS,pre.hood)}</select></label>
+   <label>Project title<input name="title" required maxlength="60" value="${esc(pre.title||'')}"></label>
+   <label>One sentence about it<textarea name="blurb" required maxlength="140" rows="2">${esc(pre.blurb||'')}</textarea></label>
+   <label>Photo<input name="photo" type="file" accept="image/*"></label><img id="pv" class="preview" hidden alt="">
+   <label>Link <span class="hint">optional</span><input name="link" type="url" placeholder="https://" value="${esc(pre.link||'')}"></label>
+   <p class="err" id="er"></p><div><button class="btn" type="submit" id="hs">Publish build</button></div></form>`);
+  const fi=$('#hf [name=photo]');fi.onchange=()=>{const f=fi.files[0],pv=$('#pv');if(f){pv.src=URL.createObjectURL(f);pv.hidden=false}else pv.hidden=true};
+  $('#hf').onsubmit=async e=>{e.preventDefault();const d=Object.fromEntries(new FormData(e.target)),f=fi.files[0];
+    $('#hs').disabled=true;$('#hs').textContent='Publishing';
+    try{
+      let imageData='';if(f){imageData=await shrink(f)}
+      await queue(()=>db.collection('highlights').add({name:d.name,age:d.age,hood:d.hood==='Somewhere else'?'':d.hood,title:d.title,blurb:d.blurb,link:okLink(d.link),imageData,createdAt:Date.now()}));
+      if(pre._done)await pre._done();dlg.close();toast('Build published');
+    }catch(err){$('#er').textContent=err.msg||'That did not publish. Try again, or try a different photo.';$('#hs').disabled=false;$('#hs').textContent='Publish build'}};
+}
+function chForm(pre={}){
+  const ed=!!pre.id,tools=pre.tools||[];
+  openDlg(ed?'Edit project':'Add project',`<p class="sub" style="margin:0">Students get matched to it by topic, experience, and grade.${ed?' Changes go live right away.':''}</p>
+   <form class="f" id="cf">
+   <label>Title<input name="title" required maxlength="70" value="${esc(pre.title||'')}"></label>
+   <label>Short description<textarea name="blurb" required maxlength="200" rows="2">${esc(pre.blurb||'')}</textarea></label>
+   <div class="two"><label>Track<select name="track">${opts(Object.entries(TRACKS),pre.track)}</select></label>
+   <label>Best for<select name="level">${opts(LEVELS.map((l,i)=>[i,l]),pre.level??0)}</select></label></div>
+   ${gradeSelects(pre)}
+   <label>Time<input name="time" required placeholder="About 2 hours" value="${esc(pre.time||'')}"></label>
+   <div class="two"><label>Credit: who made the guide<input name="creditName" placeholder="Hack Club" value="${esc(pre.credit?.name||'')}"></label>
+   <label>Credit link<input name="creditUrl" type="url" placeholder="https://" value="${esc(pre.credit?.url||'')}"></label></div>
+   <label>Source code or repo <span class="hint">optional</span><input name="source" type="url" placeholder="https://github.com/..." value="${esc(pre.source||'')}"></label>
+   ${topicChecks(pre.interests)}
+   <fieldset><legend>Uses these languages or tools</legend><div class="checks">${[...new Set(LANGS.concat(HWTOOLS,tools))].map(t=>`<label><input type="checkbox" name="t" value="${esc(t)}" ${tools.includes(t)?'checked':''}>${esc(t)}</label>`).join('')}</div></fieldset>
+   <label>Materials, one per line<textarea name="materials" rows="5">${esc((pre.materials||[]).join('\n'))}</textarea></label>
+   <label>Steps, one per line<textarea name="steps" rows="9" required>${esc((pre.steps||[]).join('\n'))}</textarea></label>
+   <label>Safety note <span class="hint">optional</span><input name="safety" maxlength="240" value="${esc(pre.safety||'')}"></label>
+   <p class="err" id="er"></p><div><button class="btn" type="submit">${ed?'Save changes':'Publish project'}</button></div></form>`);
+  $('#cf').onsubmit=async e=>{e.preventDefault();const fd=new FormData(e.target),d=Object.fromEntries(fd);
+    const c={title:d.title,blurb:d.blurb,track:d.track,level:+d.level,minGrade:+d.minGrade,maxGrade:+d.maxGrade,time:d.time,interests:fd.getAll('i'),tools:fd.getAll('t'),materials:lines(d.materials),steps:lines(d.steps),safety:d.safety||'',credit:{name:d.creditName||'',url:okLink(d.creditUrl)},source:okLink(d.source),createdAt:pre.createdAt||Date.now()};
+    if(!c.interests.length)return $('#er').textContent='Pick at least one topic.';
+    if(c.minGrade>c.maxGrade)return $('#er').textContent='Lowest grade has to be at or below highest grade.';
+    if(c.steps.length<2)return $('#er').textContent='Add at least two steps, one per line.';
+    try{
+      if(ed)await queue(()=>db.doc('challenges/'+pre.id).set(c));else await queue(()=>db.collection('challenges').add(c));
+      dlg.close();toast(ed?'Changes saved':'Project published')
+    }catch(err){$('#er').textContent='That did not save. Try again.'}};
+}
+async function delItem(col,id){
+  if(!confirm('Delete this for everyone?'))return;
+  const item=D[col].find(x=>x.id===id);
+  try{await queue(()=>db.doc(col+'/'+id).delete());if(col==='highlights'&&item&&item.imageId&&assets){try{await assets.delete(item.imageId)}catch(e){}}toast('Deleted')}
+  catch(e){toast('Delete failed. Try again.')}
+}
+async function loadStarter(){
+  if(!confirm('Add the starter projects and programs to your database?'))return;
+  try{
+    const r=await fetch('seed.json');if(!r.ok)throw 0;const seed=await r.json();
+    const items=[];for(const col of ['challenges','opps'])for(const [id,o] of Object.entries(seed[col]||{}))items.push([col+'/'+id,o]);
+    await db.batchSet(items);toast(`Added ${items.length} items`);
+  }catch(e){toast('Could not load seed.json. Make sure it is next to index.html.')}
+}
+function backup(){
+  const data={exportedAt:new Date().toISOString()};
+  for(const col of ['challenges','opps','highlights'])data[col]=Object.fromEntries(D[col].map(({id,...rest})=>[id,rest]));
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
+  a.download='workbench-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+}
+async function removeSub(owner,sid){
+  const ref=db.doc('submissions/'+owner);const s=await ref.get();if(!s.exists)return;
+  await queue(()=>ref.set({items:(s.data().items||[]).filter(x=>x.sid!==sid)}));
+}
+function approve(owner,sid){
+  const s=D.subs.find(x=>x.owner===owner&&x.sid===sid);if(!s)return;
+  const done=()=>removeSub(owner,sid);
+  if(s.kind==='build')hlForm({name:s.name,age:s.age,hood:s.hood,title:s.title,blurb:s.blurb,link:s.link,_done:done});
+  else oppForm('admin',{...s,_done:done});
+}
+async function dismiss(owner,sid){try{await removeSub(owner,sid);toast('Dismissed')}catch(e){toast('That did not work. Try again.')}}
+
+init();
+</script>
+</body>
+</html>
