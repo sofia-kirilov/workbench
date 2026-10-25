@@ -385,6 +385,18 @@ h2{text-shadow:2px 2px 0 var(--shadow)}
 @keyframes fly{to{transform:translateY(-125vh) rotate(6deg)}}
 @keyframes flick{50%{opacity:.4}}
 @media (min-width:861px){.bubble{right:auto;left:calc(100% + 14px);top:-36px}.bubble::after{right:auto;left:-7px;top:16px;transform:rotate(135deg)}}
+.partbox{margin-top:24px;display:grid;gap:14px}
+.partbox .search{max-width:none}
+.pchip{display:inline-flex;align-items:center;gap:6px;background:var(--panel2);border:2px solid var(--line);border-radius:8px;padding:3px 5px 3px 11px;font-size:.92rem}
+.pchip button{border:0;background:none;cursor:pointer;color:var(--muted);display:grid;place-items:center;padding:3px;border-radius:4px}
+.pchip button:hover{color:var(--ink);background:var(--line)}
+.pchip svg{width:12px;height:12px}
+.pmlist{display:grid;gap:14px;margin-top:18px}
+.pm .pmhead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.pm .pct{font-family:var(--pixel);font-size:.78rem;color:var(--star);white-space:nowrap;padding-top:4px}
+.pm .bar{margin-top:12px}
+.pm .facts dd .miss{color:var(--warn)}
+.pm .btn{margin-top:14px}
 @media (max-width:860px){.hero{grid-template-columns:1fr;gap:12px}.skyside{max-width:405px;order:0}.astro{top:-46px;right:4px;width:40px}}
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -512,7 +524,7 @@ setInterval(()=>{if(document.visibilityState==='visible'&&Math.random()<.45)ufoF
 const TIPS=['Change one thing at a time when you test a design.','Take a photo before you take something apart.',
  'If your code breaks, read the error message out loud. Really.','Label your wires. Future you will thank you.',
  'Start small, then add one feature at a time.','Save your work before you try the risky thing.'];let tipI=0;
-const PAGEPX={Projects:['robot','Robot. Click for a building tip.'],Programs:['rocket','Rocket'],Community:['alien','Alien'],'About Workbench':['moon','Moon with a flag'],Saved:['astro','Astronaut'],Admin:['robot','Robot']};
+const PAGEPX={Projects:['robot','Robot. Click for a building tip.'],Programs:['rocket','Rocket'],Community:['alien','Alien'],'About Workbench':['moon','Moon with a flag'],'Parts finder':['rover','Rover'],Saved:['astro','Astronaut'],Admin:['robot','Robot']};
 function pageTitle(t){const m=PAGEPX[t];return m?`<h1>${t}<button class="pagepx" data-px="${m[0]}" aria-label="${m[1]}">${sprite(m[0])}</button></h1>`:`<h1>${t}</h1>`}
 (()=>{let buf='';addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)||e.key.length!==1)return;
   buf=(buf+e.key.toLowerCase()).slice(-6);if(buf==='launch'){buf='';launch();egg('launch')}})})();
@@ -554,11 +566,11 @@ const meter=l=>`<span class="lvl"><span class="bars" aria-hidden="true">${[0,1,2
 
 let db=null,user=null,assets=null,uid=null,isAdmin=false,localOnly=true;
 const D={challenges:[],opps:[],highlights:[],subs:[]};
-const S={profile:null,tab:'home',pq:'',oq:'',pInts:[],oInts:[],pFit:false,oFit:false,pLevel:'all',oType:'All',oSort:'match',savedTab:'p'};
+const S={profile:null,tab:'home',pq:'',oq:'',pInts:[],oInts:[],pFit:false,oFit:false,pLevel:'all',oType:'All',oSort:'match',savedTab:'p',parts:[],hasComputer:true};
 let Q=null;
 const GUEST={name:'',grade:null,age:null,sw:0,hw:0,langs:[],hwTools:[],interests:[],hood:'',progress:{},saved:{p:[],o:[]}};
 const P=()=>S.profile||GUEST;
-const ROUTES=['home','projects','opps','community','about','saved','admin','login','start'];
+const ROUTES=['home','projects','opps','parts','community','about','saved','admin','login','start'];
 const routeFromHash=()=>{const t=location.hash.slice(1);return ROUTES.includes(t)?t:'home'};
 
 const $=s=>document.querySelector(s);
@@ -611,6 +623,7 @@ async function onUser(u){
   if(!S.profile)S.profile=load('wb_profile',null);
   S.profile=normalize(S.profile);
   if(uid&&S.profile&&!remote)saveProfile();
+  if(S.profile&&Array.isArray(S.profile.parts)&&S.profile.parts.length)S.parts=S.profile.parts.slice();
   if(S.profile&&(S.profile.grade==null||S.profile.age==null)){Q=newQ();Q.step=STEPS.findIndex(s=>s.key==='grade')}
   if(uid&&!S.profile){Q=newQ();Q.name=((u.displayName||'').split(' ')[0])||''}
   if(unsubSubs){unsubSubs();unsubSubs=null;D.subs=[]}
@@ -628,7 +641,8 @@ function subscribe(){
   sub('opps',(a,b)=>(a.createdAt||0)-(b.createdAt||0));
   sub('highlights',(a,b)=>(b.createdAt||0)-(a.createdAt||0));
 }
-function refresh(){if(!Q&&!$('#dlg').open&&document.activeElement?.type!=='search'&&!['login','start'].includes(S.tab))render()}
+function refresh(){if(!Q&&!$('#dlg').open&&document.activeElement?.type!=='search'&&document.activeElement?.id!=='partin'&&!['login','start'].includes(S.tab))render()}
+S.parts=load('wb_parts',[]);if(!Array.isArray(S.parts))S.parts=[];
 async function saveProfile(){
   save('wb_profile',S.profile);
   if(localOnly)return;
@@ -900,8 +914,62 @@ function projList(){
   l=l.map(c=>({c,s:scoreCh(c).s})).sort((a,b)=>b.s-a.s).map(x=>x.c);
   return `<p class="count">${l.length} project${l.length===1?'':'s'}</p>`+(l.length?`<div class="grid">${l.map(chCard).join('')}</div>`:(D.challenges.length?'<p class="empty">Nothing matches. Clear the search or pick fewer filters.</p>':'<p class="empty">No projects posted yet.</p>'));
 }
+const COMMON_PARTS=['Arduino','Raspberry Pi','ESP32','Breadboard','Jumper wires','LEDs','Resistors','Buttons','Servo motor','DC motor','Batteries','Sensors','Soldering iron','3D printer','Cardboard','Aluminum foil','Tape','Glue','Straws','Scissors','Paper','Plastic wrap'];
+const PART_SYN=[['led','leds','light-emitting diode'],['jumper wire','jumper','wire','wiring'],['battery','batteries','9v','aa battery'],['raspberry pi','pi','pico'],['arduino','uno','nano'],['esp32','esp8266'],
+ ['sensor','bme280','dht11','dht22','ultrasonic'],['servo','servo motor','motor'],['dc motor','motor'],['cardboard','box','pizza box'],['glue','hot glue','glue stick'],['solder','soldering','soldering iron'],
+ ['3d printer','3d printing','3d print'],['foil','aluminum foil','tin foil'],['straw','soda straw','straws'],['paper','construction paper','black paper'],['tape','duct tape','masking tape','electrical tape','shipping tape'],
+ ['scissors'],['pencil'],['ruler','meter stick','measuring tape'],['button','push button','switch'],['resistor'],['breadboard'],['plastic wrap','cling wrap','saran wrap']];
+const FREEISH=/\b(computer|browser|laptop|account|free|tablet|phone|chromebook)\b/i;
+const escRe=t=>t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+const normPart=x=>{let n=String(x).toLowerCase().replace(/\s+/g,' ').trim();if(n.length>3&&/[^s]s$/.test(n))n=n.slice(0,-1);return n};
+function partTerms(raw){
+  const a=String(raw).toLowerCase().trim(),n=normPart(raw),out=new Set([a,n]);
+  PART_SYN.forEach(g=>{if(g.includes(a)||g.includes(n))g.forEach(t=>out.add(t))});
+  return [...out].filter(t=>t.length>1);
+}
+const hasTerm=(text,t)=>new RegExp('\\b'+escRe(t)+'(e?s)?\\b','i').test(text);
+function partMatch(c){
+  const terms=S.parts.flatMap(partTerms),have=[],missing=[];let need=0;
+  (c.materials||[]).forEach(it=>{
+    if(FREEISH.test(it)){if(!S.hasComputer&&/computer|laptop|tablet|browser|chromebook/i.test(it)){need++;missing.push(it)}return}
+    need++;const txt=it.replace(/measuring tape|tape measure/ig,'ruler');(terms.some(t=>hasTerm(txt,t))?have:missing).push(it);
+  });
+  return {have,missing,need,pct:need?Math.round(have.length/need*100):100};
+}
+function partResults(){
+  if(!S.parts.length)return '<p class="empty">Add a few parts above and the projects you can build show up here.</p>';
+  const rows=D.challenges.map(c=>({c,m:partMatch(c)})).filter(x=>x.m.need>0&&x.m.have.length>0)
+    .sort((a,b)=>b.m.pct-a.m.pct||b.m.have.length-a.m.have.length||scoreCh(b.c).s-scoreCh(a.c).s);
+  const none=D.challenges.filter(c=>partMatch(c).need===0&&fits(c));
+  const card=({c,m})=>`<article class="card pm"><div class="pmhead"><div><h3>${esc(c.title)}</h3><p class="why">${esc(gradeText(c))}, ${esc((c.time||'').toLowerCase())}${S.profile&&P().grade!=null&&!fits(c)?`. Made for ${esc(gradeText(c).toLowerCase())}`:''}</p></div>
+    <span class="pct">${m.missing.length?`${m.have.length} of ${m.need} parts`:'Ready to build'}</span></div>
+    <div class="bar" role="img" aria-label="You have ${m.pct} percent of the parts"><i style="width:${m.pct}%"></i></div>
+    <dl class="facts"><div><dt>You have</dt><dd>${m.have.map(esc).join(', ')}</dd></div>
+    <div><dt>${m.missing.length?'Still need':'Missing'}</dt><dd>${m.missing.length?`<span class="miss">${m.missing.map(esc).join(', ')}</span>`:'Nothing. You have everything.'}</dd></div></dl>
+    <button class="btn small" data-ch="${esc(c.id)}">Open project</button></article>`;
+  return `<p class="count" style="margin-top:22px">${rows.length} project${rows.length===1?'':'s'} use your parts</p>`
+    +(rows.length?`<div class="pmlist">${rows.map(card).join('')}</div>`:'<p class="empty">None of the projects use those parts yet. Try adding more, or check spelling, like LEDs or cardboard.</p>')
+    +(none.length?`<div class="rowhead"><div><h2>No parts needed</h2><p class="sub">These only need a computer.</p></div></div><div class="grid">${none.map(chCard).join('')}</div>`:'');
+}
+function vParts(){
+  const chips=S.parts.map((x,i)=>`<span class="pchip">${esc(x)}<button data-rmpart="${i}" aria-label="Remove ${esc(x)}">${ico('x')}</button></span>`).join('');
+  const quick=COMMON_PARTS.filter(x=>!S.parts.some(y=>normPart(y)===normPart(x))).map(x=>`<button class="toggle" data-addpart="${esc(x)}">+ ${esc(x)}</button>`).join('');
+  return `<section class="pagehead"><div>${pageTitle('Parts finder')}<p class="sub">Type the parts and supplies you have. We'll show the projects you can build with them and what you're missing.</p></div></section>
+    <div class="card partbox">
+      <label class="search">${ico('search')}<input id="partin" placeholder="Type a part and press Enter, like LEDs or cardboard" autocomplete="off" aria-label="Add a part"></label>
+      <div class="chips">${chips||'<span class="why">No parts added yet. You can type several at once with commas.</span>'}</div>
+      <div class="toolbar"><button class="toggle" id="hascomp" aria-pressed="${S.hasComputer}">I have a computer</button>${S.parts.length?'<span class="sep"></span><button class="linkbtn" id="clearparts">Clear all parts</button>':''}</div>
+      <div><p class="why" style="margin:0 0 8px">Quick add</p><div class="chips">${quick}</div></div>
+    </div>
+    <div id="presults">${partResults()}</div>`;
+}
+function saveParts(){save('wb_parts',S.parts);if(S.profile){S.profile.parts=S.parts.slice();saveProfile()}}
+function addParts(str){
+  String(str).split(/[,;\n]+/).map(x=>x.trim()).filter(Boolean).forEach(x=>{if(x.length<=40&&!S.parts.some(y=>normPart(y)===normPart(x)))S.parts.push(x)});
+  saveParts();render();const pi=$('#partin');if(pi)pi.focus();
+}
 function vProjects(){
-  return `<section class="pagehead"><div>${pageTitle('Projects')}<p class="sub">Step by step builds from Hack Club, NASA, and other makers. Start one to save it to My projects.</p></div>${isAdmin?'<button class="btn" id="addCh">Add project</button>':''}</section>
+  return `<section class="pagehead"><div>${pageTitle('Projects')}<p class="sub">Step by step builds from Hack Club, NASA, and other makers. Start one to save it to My projects.</p></div><div class="acts" style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn ghost" href="#parts">Build with my parts</a>${isAdmin?'<button class="btn" id="addCh">Add project</button>':''}</div></section>
     <div class="filters">${searchBox('pq','Search projects, tools, or topics')}${intChips('pInts')}
       <div class="toolbar">${PLEVELS.map(([v,t])=>`<button class="toggle" data-plv="${v}" aria-pressed="${S.pLevel===v}">${t}</button>`).join('')}<span class="sep"></span><button class="toggle" id="pfit" aria-pressed="${S.pFit}">Only my grade</button></div></div>
     <div id="results">${projList()}</div>`;
@@ -958,7 +1026,7 @@ function render(){
   if(S.tab==='saved'&&!S.profile)S.tab=FB?'start':'home';
   if((S.tab==='login'||S.tab==='start')&&(uid||!FB))S.tab='home';
   const ns=S.profile?S.profile.saved.p.length+S.profile.saved.o.length:0;
-  const links=[['projects','Projects'],['opps','Programs'],['community','Community'],['about','About']].concat(S.profile?[['saved','Saved']]:[]).concat(isAdmin?[['admin','Admin']]:[]);
+  const links=[['projects','Projects'],['opps','Programs'],['parts','Parts finder'],['community','Community'],['about','About']].concat(S.profile?[['saved','Saved']]:[]).concat(isAdmin?[['admin','Admin']]:[]);
   $('#tabs').innerHTML=links.map(([id,t])=>`<a href="#${id}" ${S.tab===id?'aria-current="page"':''}>${t}${id==='saved'&&ns?`<span class="n">${ns}</span>`:''}</a>`).join('');
   if(FB&&!uid)$('#tabs').insertAdjacentHTML('beforeend','<a class="mobonly" href="#login">Log in</a>');
   $('#tabs').classList.remove('open');$('#menu').setAttribute('aria-expanded','false');
@@ -966,9 +1034,9 @@ function render(){
   $('#authbox').innerHTML=signed?`<button class="acct" id="acct" aria-label="Your account"><span class="av" aria-hidden="true">${esc(nm.charAt(0).toUpperCase()||'?')}</span><span class="nm">${esc(nm)}${isAdmin?', admin':''}</span></button>`
     :`${FB?'<a class="btn ghost" href="#login">Log in</a>':''}<a class="btn" href="#start">Get started</a>`;
   const ac=$('#acct');if(ac)ac.onclick=()=>S.profile?openAccount():startQuiz();
-  const V={home:vHome,projects:vProjects,opps:vOpps,community:vCommunity,about:vAbout,saved:vSaved,admin:vAdmin,login:()=>vAuth(true),start:()=>vAuth(false)};
+  const V={home:vHome,projects:vProjects,opps:vOpps,parts:vParts,community:vCommunity,about:vAbout,saved:vSaved,admin:vAdmin,login:()=>vAuth(true),start:()=>vAuth(false)};
   $('#main').innerHTML=(V[S.tab]||vHome)();
-  document.title=S.tab==='home'?'Workbench':({projects:'Projects',opps:'Programs',community:'Community',about:'About',saved:'Saved',admin:'Admin',login:'Log in',start:'Get started'}[S.tab]||'')+' | Workbench';
+  document.title=S.tab==='home'?'Workbench':({projects:'Projects',opps:'Programs',parts:'Parts finder',community:'Community',about:'About',saved:'Saved',admin:'Admin',login:'Log in',start:'Get started'}[S.tab]||'')+' | Workbench';
   if(S.tab==='login'||S.tab==='start')bindAuth(S.tab==='login');
   bind();
 }
@@ -1004,8 +1072,15 @@ function bind(){
   const sa=$('#sat');if(sa)sa.onclick=()=>{toast('Signal received. Keep building.');egg('satellite')};
   $$('.pagepx').forEach(b=>b.onclick=()=>{const k=b.dataset.px;
     if(k==='rocket'){launch();return}
+    if(k==='rover'){toast('Beep boop. Scanning your parts.');return}
     if(k==='robot'){toast('Tip: '+TIPS[(tipI++)%TIPS.length]);egg('robot');return}
     toast(k==='alien'?'Greetings. We like your builds.':k==='moon'?'One small step.':'Still floating.')});
+  const pi=$('#partin');if(pi){pi.onkeydown=e=>{if((e.key==='Enter'||e.key===',')&&pi.value.trim()){e.preventDefault();addParts(pi.value)}};
+    pi.onpaste=e=>{const t=(e.clipboardData||window.clipboardData).getData('text');if(/[,;\n]/.test(t)){e.preventDefault();addParts(t)}}}
+  $$('[data-addpart]').forEach(b=>b.onclick=()=>addParts(b.dataset.addpart));
+  $$('[data-rmpart]').forEach(b=>b.onclick=()=>{S.parts.splice(+b.dataset.rmpart,1);saveParts();render()});
+  on('hascomp',()=>{S.hasComputer=!S.hasComputer;render()});
+  on('clearparts',()=>{S.parts=[];saveParts();render()});
   on('editint',()=>{Q=newQ();Q.step=STEPS.findIndex(x=>x.key==='interests');render()});
   $$('[data-del]').forEach(b=>b.onclick=()=>delItem(...b.dataset.del.split('|')));
   $$('[data-edit]').forEach(b=>b.onclick=()=>editItem(...b.dataset.edit.split('|')));
